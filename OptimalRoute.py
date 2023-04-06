@@ -13,19 +13,39 @@ def haversine(lat1, lon1, lat2, lon2):
     d = R * c # Distance in km
     return d
 
+import heapq
+
 def dijkstra(source_airport, dest_airport):
-    SLAT = (airports_df.loc[airports_df['IATA'] == source_airport, 'Latitude'].values[0])
-    SLONG = (airports_df.loc[airports_df['IATA'] == source_airport, 'Longitude'].values[0])
+    # Initialize distance and visited dictionaries
+    distances = {source_airport: 0}
+    visited = {}
 
-    DLAT = (airports_df.loc[airports_df['IATA'] == dest_airport, 'Latitude'].values[0])
-    DLONG = (airports_df.loc[airports_df['IATA'] == dest_airport, 'Longitude'].values[0])
+    # Initialize priority queue with source airport
+    pq = [(0, source_airport)]
 
-    for index, row in routes_df[routes_df['Source airport'] == source_airport].iterrows():
-        print(row['Destination airport'])
+    while pq:
+        # Get the closest airport from the priority queue
+        (dist, curr_airport) = heapq.heappop(pq)
 
+        # Check if we've found the destination airport
+        if curr_airport == dest_airport:
+            return dist
 
-    distance = haversine(SLAT,SLONG,DLAT,DLONG)
+        # Mark the current airport as visited
+        visited[curr_airport] = True
 
+        # Update the distances of neighboring airports
+        for index, row in routes_df[routes_df['Source airport'] == curr_airport].iterrows():
+            neighbor_airport = row['Destination airport']
+            neighbor_distance = row['Distance']
+            if neighbor_airport not in visited:
+                new_distance = dist + neighbor_distance
+                if neighbor_airport not in distances or new_distance < distances[neighbor_airport]:
+                    distances[neighbor_airport] = new_distance
+                    heapq.heappush(pq, (new_distance, neighbor_airport))
+
+    # If we get here, there is no path from source to dest
+    return float('inf')
 
 
 # Load the data
