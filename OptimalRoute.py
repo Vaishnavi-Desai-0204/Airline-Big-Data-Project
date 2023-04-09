@@ -14,18 +14,38 @@ def haversine(lat1, lon1, lat2, lon2):
     return d
 
 def dijkstra(source_airport, dest_airport):
-    SLAT = (airports_df.loc[airports_df['IATA'] == source_airport, 'Latitude'].values[0])
-    SLONG = (airports_df.loc[airports_df['IATA'] == source_airport, 'Longitude'].values[0])
-    distances = {source_airport: 0}
     
-    for index, row in routes_df[routes_df['Source airport'] == source_airport].iterrows():
-        neighbor_airport = row['Destination airport']
-        DLAT = (airports_df.loc[airports_df['IATA'] == neighbor_airport, 'Latitude'].values[0])
-        DLONG = (airports_df.loc[airports_df['IATA'] == neighbor_airport, 'Longitude'].values[0])
-        distance = haversine(SLAT,SLONG,DLAT,DLONG)
-        distances[neighbor_airport] = distance
-        
-    print(distances)
+    distances = {}
+    queue = []
+    
+    previous = []
+    current_airport = source_airport
+    visited = {}
+
+    for index, row in routes_df.iterrows():
+        dest_airport = row['Destination airport']
+        distances[dest_airport] = math.inf
+
+    distances[source_airport] = 0
+    queue = [(0, source_airport)]
+
+    while len(queue) > 0:
+        for index, row in routes_df[routes_df['Source airport'] == current_airport].iterrows():
+            neighbor_airport = row['Destination airport']
+
+            SLAT = (airports_df.loc[airports_df['IATA'] == current_airport, 'Latitude'].values[0])
+            SLONG = (airports_df.loc[airports_df['IATA'] == current_airport, 'Longitude'].values[0])
+            DLAT = (airports_df.loc[airports_df['IATA'] == neighbor_airport, 'Latitude'].values[0])
+            DLONG = (airports_df.loc[airports_df['IATA'] == neighbor_airport, 'Longitude'].values[0])
+            distance = haversine(SLAT,SLONG,DLAT,DLONG)
+
+            if(distances[neighbor_airport] > distances[current_airport] + distance):
+                distances[neighbor_airport] = distances[current_airport] + distance
+                heapq.heappush(queue, (distance, neighbor_airport))
+
+        current_airport = heapq.heappop(queue)
+        visited[current_airport] = True
+   
 
 # Load the data
 airports_df = pd.read_csv('airports.dat', header=None, names=['Airport ID', 'Name', 'City', 'Country', 'IATA', 'ICAO', 'Latitude', 'Longitude', 'Altitude', 'Timezone', 'DST', 'Tz database time zone', 'Type', 'Source'], index_col=0)
