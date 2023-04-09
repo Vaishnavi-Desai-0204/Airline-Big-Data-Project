@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import collections
 from IPython.display import Image
 
-routes = pd.read_csv('routes.csv',sep=',',header=None)
+routes = pd.read_csv('Data/routes.csv',sep=',',header=None)
 routes = routes.drop([0,1,3,5,6,7,8],axis=1)
 routes.rename(columns={2: 'origin',4: 'destination'}, inplace=True)
 

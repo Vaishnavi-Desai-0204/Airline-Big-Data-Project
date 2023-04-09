@@ -6,8 +6,8 @@ import plotly.offline as pyo
 app = Flask(__name__)
 
 # Load the data into a pandas dataframe
-routes_df = pd.read_csv('routes.csv', sep=',', header=None)
-airports_df = pd.read_csv('airports.csv')
+routes_df = pd.read_csv('Data/routes.csv', sep=',', header=None)
+airports_df = pd.read_csv('Data/airports.csv')
 
 # Rename columns
 routes_df.rename(columns={2: 'Source Airport', 4: 'Destination Airport'}, inplace=True)

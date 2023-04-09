@@ -48,8 +48,8 @@ def dijkstra(source_airport, dest_airport):
    
 
 # Load the data
-airports_df = pd.read_csv('airports.dat', header=None, names=['Airport ID', 'Name', 'City', 'Country', 'IATA', 'ICAO', 'Latitude', 'Longitude', 'Altitude', 'Timezone', 'DST', 'Tz database time zone', 'Type', 'Source'], index_col=0)
-routes_df = pd.read_csv('routes.dat', header=None, names=['Airline', 'Airline ID', 'Source airport', 'Source airport ID', 'Destination airport', 'Destination airport ID', 'Codeshare', 'Stops', 'Equipment'], index_col=0)
+airports_df = pd.read_csv('Data/airports.dat', header=None, names=['Airport ID', 'Name', 'City', 'Country', 'IATA', 'ICAO', 'Latitude', 'Longitude', 'Altitude', 'Timezone', 'DST', 'Tz database time zone', 'Type', 'Source'], index_col=0)
+routes_df = pd.read_csv('Data/routes.dat', header=None, names=['Airline', 'Airline ID', 'Source airport', 'Source airport ID', 'Destination airport', 'Destination airport ID', 'Codeshare', 'Stops', 'Equipment'], index_col=0)
 
 # Get user input for the source and destination airports
 source = input("Enter the source airport: ")
