@@ -3,8 +3,13 @@ import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 
 # Load the data into a pandas dataframe
-routes_df = pd.read_csv('routes.csv')
+routes_df = pd.read_csv('routes.csv',sep=',',header=None)
 airports_df = pd.read_csv('airports.csv')
+
+routes_df.rename(columns={2: 'Source Airport',4: 'Destination Airport'}, inplace=True)
+
+print(routes_df.columns)
+
 
 # Group the routes by origin and destination airports to get the number of flights for each route
 route_counts = routes_df.groupby(['Source Airport', 'Destination Airport']).size().reset_index(name='Num flights')
