@@ -1,49 +1,82 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import pandas as pd
-import plotly.graph_objs as go
-import plotly.offline as pyo
+import numpy as np
+import networkx as nx
+import matplotlib.pyplot as plt
+from mpl_toolkits.basemap import Basemap
 
 app = Flask(__name__)
 
-# Load the data into a pandas dataframe
-routes_df = pd.read_csv('Data/routes.csv', sep=',', header=None)
-airports_df = pd.read_csv('Data/airports.csv')
 
-# Rename columns
-routes_df.rename(columns={2: 'Source Airport', 4: 'Destination Airport'}, inplace=True)
-
-# Group the routes by origin and destination airports to get the number of flights for each route
-route_counts = routes_df.groupby(['Source Airport', 'Destination Airport']).size().reset_index(name='Num flights')
-
-# Sort the routes by the number of flights in descending order
-route_counts = route_counts.sort_values(by='Num flights', ascending=False)
-
-# Extract the top 10 busiest routes
-top_routes = route_counts.head(10)
-
-# Create a bar chart of the top 10 busiest routes using Plotly
-fig = go.Figure()
-fig.add_trace(go.Bar(
-    x=top_routes['Source Airport'] + ' to ' + top_routes['Destination Airport'],
-    y=top_routes['Num flights'],
-    name='Top 10 Busiest Routes'
-))
-fig.update_layout(
-    title='Top 10 Busiest Routes',
-    xaxis_title='Route',
-    yaxis_title='Number of flights',
-    xaxis_tickangle=-45
-)
-plot_div = pyo.offline.plot(fig, output_type='div')
 
 @app.route('/')
-def index():
-    return render_template('index.html')
+def home():
+    return render_template('home.html')
 
-@app.route('/top_routes')
-def top_routes():
-    return render_template('top_routes.html', plot_div=plot_div)
+@app.route('/shortest_path', methods=['POST'])
+def results():
+    # Load data
+    routes = pd.read_csv('Data/routes.csv', sep=',', header=None)
+    routes = routes.drop([0, 1, 3, 5, 6, 7, 8], axis=1)
+    routes.rename(columns={2: 'origin', 4: 'destination'}, inplace=True)
+    isolated = ['BMY', 'GEA', 'ILP', 'KNQ', 'KOC', 'LIF', 'MEE', 'TGJ', 'TOU', 'UVE','ERS', 'MPA', 'NDU', 'OND','BFI', 'CLM', 'ESD', 'FRD','AKB', 'DUT', 'IKO', 'KQA','SPB', 'SSB','CKX', 'TKJ','BLD', 'GCW']
+    airports_df = pd.read_csv('Data/airports.dat', header=None, names=['Airport ID', 'Name', 'City', 'Country', 'IATA', 'ICAO', 'Latitude', 'Longitude', 'Altitude', 'Timezone', 'DST', 'Tz database time zone', 'Type', 'Source'], index_col=0)
+
+    # Filter out isolated airports
+    routes = routes[np.logical_not(routes.origin.isin(isolated))]
+    routes = routes[np.logical_not(routes.destination.isin(isolated))]
+
+    # Create graph
+    llista1 = np.unique(routes.origin)
+    llista2 = np.unique(routes.destination)
+    airports = np.unique(np.concatenate([llista1,llista2],axis=0))
+    routes_with_weight = routes.groupby(['origin', 'destination']).size()
+    links = routes_with_weight.index.unique()
+    weights = routes_with_weight.tolist()
+    input_tuple = [link + (weight,) for link, weight in zip (links, weights)]
+    g_und = nx.Graph()
+    g_und.name = 'Undirected Graph'
+    g_und.add_nodes_from(airports,bipartite=1)
+    g_und.add_weighted_edges_from(input_tuple)
+
+    # Find shortest path and plot on map
+    source = request.form['source']
+    destination = request.form['destination']
+    if source not in airports or destination not in airports:
+        print("One or both airports are not in the dataset.")
+    else:
+        shortest_paths = dict(nx.all_pairs_shortest_path_length(g_und))
+        path = nx.shortest_path(g_und, source=source, target=destination)
+        print("The shortest path between", source, "and", destination, "is:", path)
+        fig = plt.figure(figsize=(12, 8))
+        m = Basemap(projection='merc', llcrnrlat=-60, urcrnrlat=85, llcrnrlon=-180, urcrnrlon=180, resolution='l')
+        m.drawcoastlines()
+        m.drawcountries()
+        m.drawmapboundary(fill_color='#A6CAE0', linewidth=0)
+        m.fillcontinents(color='white', alpha=0.3)
+        for airport in path:
+            SLAT = airports_df.loc[airports_df['IATA'] == airport, 'Latitude'].values[0]
+            SLONG = airports_df.loc[airports_df['IATA'] == airport, 'Longitude'].values[0]
+            x, y = m(SLONG , SLAT)
+            m.plot(x, y, marker='o', markersize=10, markerfacecolor='red', alpha=0.8)
+
+        for i in range(len(path)-1):
+            start_airport = path[i]
+            end_airport = path[i+1]
+            start_lat = airports_df.loc[airports_df['IATA'] == start_airport, 'Latitude'].values[0]
+            start_lon = airports_df.loc[airports_df['IATA'] == start_airport, 'Longitude'].values[0]
+            end_lat = airports_df.loc[airports_df['IATA'] == end_airport, 'Latitude'].values[0]
+            end_lon = airports_df.loc[airports_df['IATA'] == end_airport, 'Longitude'].values[0]
+            x_start, y_start = m(start_lon, start_lat)
+            x_end, y_end = m(end_lon, end_lat)
+            m.plot([x_start, x_end], [y_start, y_end], linewidth=2, color='blue')
+            m.plot(x_start, y_start, marker='o', markersize=10, markerfacecolor='red', alpha=0.8)
+            m.plot(x_end, y_end, marker='o', markersize=10, markerfacecolor='red', alpha=0.8)
+            
+            # Save the plot as a PNG image and display it
+            plt.savefig('static/path.png')
+        return render_template('shortest_path.html', source=source, destination=destination)
+    
 
 if __name__ == '__main__':
     app.run(debug=True)
-

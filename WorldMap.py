@@ -26,15 +26,13 @@ routes_with_weight = routes.groupby(['origin', 'destination']).size()
 links = routes_with_weight.index.unique()
 weights = routes_with_weight.tolist()
 
-print(weights)
-
-
 input_tuple = [link + (weight,) for link, weight in zip (links, weights)]
 
 g_und = nx.Graph()
 g_und.name = 'Undirected Graph'
 g_und.add_nodes_from(airports,bipartite=1)
 g_und.add_weighted_edges_from(input_tuple)
+
 
 source = input("Enter the source airport code: ").upper()
 destination = input("Enter the destination airport code: ").upper()

@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import collections
 from IPython.display import Image
 
-routes = pd.read_csv('Data/routes.csv',sep=',',header=None)
+routes = pd.read_csv('routes.csv',sep=',',header=None)
 routes = routes.drop([0,1,3,5,6,7,8],axis=1)
 routes.rename(columns={2: 'origin',4: 'destination'}, inplace=True)
 
@@ -76,7 +76,7 @@ world_hubs = [{i:j} for i,j in zip(finalMap,finalMap.values()) if j==min(finalMa
 
 from mpl_toolkits.basemap import Basemap
 
-airports_df = pd.read_csv('Data/airports.dat', header=None, names=['Airport ID', 'Name', 'City', 'Country', 'IATA', 'ICAO', 'Latitude', 'Longitude', 'Altitude', 'Timezone', 'DST', 'Tz database time zone', 'Type', 'Source'])
+airports_df = pd.read_csv('airports.dat', header=None, names=['Airport ID', 'Name', 'City', 'Country', 'IATA', 'ICAO', 'Latitude', 'Longitude', 'Altitude', 'Timezone', 'DST', 'Tz database time zone', 'Type', 'Source'])
 airports_df = airports_df.set_index('IATA')
 
 # select only the columns we need
