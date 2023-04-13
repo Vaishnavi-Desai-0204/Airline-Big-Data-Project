@@ -21,6 +21,8 @@ route_counts = route_counts.sort_values(by='Num flights', ascending=False)
 # Extract the top 10 busiest routes
 top_routes = route_counts.head(10)
 
+print(top_routes)
+
 # Create a bar chart of the top 10 busiest routes using Plotly
 fig = go.Figure()
 fig.add_trace(go.Bar(

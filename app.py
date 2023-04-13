@@ -77,6 +77,5 @@ def results():
             plt.savefig('static/path.png')
         return render_template('shortest_path.html', source=source, destination=destination)
     
-
 if __name__ == '__main__':
     app.run(debug=True)
