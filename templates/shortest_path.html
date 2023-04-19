@@ -1,11 +1,288 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Airport Shortest Path Finder</title>
+    <meta charset="utf-8">
+    <title>D3 World Map</title>
+    <style>
+
+    body,svg{
+      width: 100%;
+      height: 100%
+    }
+    svg {
+      margin: 0;
+      display: inherit;
+
+    }
+
+      path {
+        stroke: white;
+        stroke-width: 2px;
+        fill: lightgrey;
+
+
+      }
+
+    	/* For centering */
+
+
+    	.g path {
+    		stroke-width: 1px;
+    		stroke: black;
+    		fill: #DBDBDB;
+    		cursor: pointer;
+    	}
+    	.g path:hover, path.highlighted {
+    		fill: tomato;
+    	}
+    
+
+      .bubble {
+        fill-opacity: .5;
+        stroke: #fff;
+        stroke-width: .5px;
+      }
+
+    	.arcs path {
+    	  stroke-width: 0.05px;
+    	  stroke: blue;
+    	  pointer-events: none;
+    	  fill: none;
+    	}
+
+
+    </style>
+
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://d3js.org/topojson.v0.min.js"></script>
   </head>
   <body>
-    <h1>Airport Shortest Path Finder</h1>
-    <p>The shortest path from {{ source }} to {{ destination }} is:</p>
-    <img src="{{ url_for('static', filename='path.png') }}" alt="Map">
+    <script type="text/javascript">
+
+
+    var arcdata = JSON.parse(fs.readFileSync('static/path.json').toString());
+
+    var bubbles = [  ]
+
+
+      var width = 1000;
+      var height = 510;
+      var height2 = 370
+
+      var projection = d3.geo.mercator().scale(162);
+
+      var svg = d3.select("body").append("svg")
+          .attr("viewBox", "0 0 " + width + " " + height2)
+          .attr("width", width)
+          .attr("height", height)
+
+
+
+      var path = d3.geo.path()
+          .projection(projection);
+
+
+      var g = svg.append("g");
+
+      var arcs = svg.append("g")
+          .attr("class","arcs");
+
+
+      d3.json("static/world.json", function(error, topology) {
+          g.selectAll("path")
+            .data(topojson.object(topology, topology.objects.countries)
+                .geometries)
+            .enter().append("path")
+            .attr("d", path)
+            .on("click",clicked);
+
+
+
+      /*d3.json("arcdata.json", function(error, arcdata) {*/
+        	arcs.selectAll("path")
+        		.data(arcdata)
+        		.enter().append("path")
+        		.attr('d', function(d) {
+        			return lngLatToArc(d, 'sourceLocation', 'targetLocation', 1); // A bend of 5 looks nice and subtle, but this will depend on the length of your arcs and the visual look your visualization requires. Higher number equals less bend.
+            });
+          /*});*/
+
+        var radius = d3.scale.sqrt()
+        .domain([0, 1e6])
+        .range([0, 15]);
+
+          svg.append("g")
+              .attr("class", "bubble")
+          svg.selectAll("circle")
+            .data(bubbles).enter()
+            .append("circle")
+            .attr("cx", function (d) { console.log(projection(d)); return projection(d)[0]; })
+            .attr("cy", function (d) { return projection(d)[1]; })
+            .attr("r", function (d) { return d[2]; })
+            .on('mouseover',function(current_bubble) {
+
+
+
+                    d3.select(this)
+                      .transition()
+                      .duration(1000)
+                      .style('stroke', "blue")
+
+                      filtered =  arcdata.filter(function (a) { return a.sourceLocation[0] === current_bubble[0]; })  
+                      nonfiltered = arcdata.filter(function (a) { return a.sourceLocation[0] !== current_bubble[0]; }) 
+
+                      arcs.selectAll("path").remove()
+
+                        arcs.selectAll("path")
+                        .data(filtered)
+                        .enter().append("path")
+                        .style('stroke', "blue")
+                        .style("stroke-width", "0.2")
+                        .attr('d', function(d) {
+                          return lngLatToArc(d, 'sourceLocation', 'targetLocation', 1); // A bend of 5 looks nice and subtle, but this will depend on the length of your arcs and the visual look your visualization requires. Higher number equals less bend.
+                        });
+
+                      })
+
+            .on("mouseout",function(current_bubble) {
+
+                    d3.select(this)
+                      .transition()
+                      .duration(1000)
+                      .style('stroke', "black")
+
+                        arcs.selectAll("path").remove()
+
+                        arcs.selectAll("path")
+                        .data(arcdata)
+                        .enter().append("path")
+                        .style('stroke', "blue")
+                        .attr('d', function(d) {
+                          return lngLatToArc(d, 'sourceLocation', 'targetLocation', 1); // A bend of 5 looks nice and subtle, but this will depend on the length of your arcs and the visual look your visualization requires. Higher number equals less bend.
+                        });
+                      })
+
+
+
+
+
+            .style('fill-opacity', 0.5)
+            .style('stroke', "black")
+            .style('stroke-width', 0.3)
+            
+
+            /*.attr("r", 1.5);*/
+            /*.attr("r", function(d) { return radius(size); });*/
+
+            /*.attr("cx", function (d) { return d.longitude; })
+            .attr("cy", function (d) { return d.latitude; })*/
+
+
+                        // Create Event Handlers for mouse
+            function handleMouseOver(current_bubble, arcs, arcdata) {  // Add interactivity
+                               // Use D3 to select element, change color and size
+                filtered =  arcdata.filter(function (a) { return a.sourceLocation[1] === current_bubble[0]; })
+                arcs.selectAll("path")
+
+                .data(arcdata)
+                .enter().append("path")
+
+                .style('stroke', "red")
+
+
+
+                .attr('d', function(d) {
+                return lngLatToArc(d, 'sourceLocation', 'targetLocation', 1); // A bend of 5 looks nice and subtle, but this will depend on the length of your arcs and the visual look your visualization requires. Higher number equals less bend.
+            });
+
+              /*d3.select(this)
+                 .attr({
+                  fill: color,
+                  });
+               var mouseover = d;
+               onhover(mouseover,margin,width,height,x,y,xAxis,yAxis);*/
+                }
+
+});
+
+
+
+      	// This function takes an object, the key names where it will find an array of lng/lat pairs, e.g. `[-74, 40]`
+      	// And a bend parameter for how much bend you want in your arcs, the higher the number, the less bend.
+      	function lngLatToArc(d, sourceName, targetName, bend){
+      		// If no bend is supplied, then do the plain square root
+      		bend = bend || 1 ;
+      		// `d[sourceName]` and `d[targetname]` are arrays of `[lng, lat]`
+      		// Note, people often put these in lat then lng, but mathematically we want x then y which is `lng,lat`
+
+      		var sourceLngLat = d[sourceName],
+      				targetLngLat = d[targetName];
+
+      		if (targetLngLat && sourceLngLat) {
+      			var sourceXY = projection( sourceLngLat ),
+      					targetXY = projection( targetLngLat );
+
+      			// Uncomment this for testing, useful to see if you have any null lng/lat values
+      			// if (!targetXY) console.log(d, targetLngLat, targetXY)
+      			var sourceX = sourceXY[0],
+      					sourceY = sourceXY[1];
+
+      			var targetX = targetXY[0],
+      					targetY = targetXY[1];
+
+      			var dx = targetX - sourceX,
+      					dy = targetY - sourceY,
+      					dr = Math.sqrt(dx * dx + dy * dy)*bend;
+
+      			// To avoid a whirlpool effect, make the bend direction consistent regardless of whether the source is east or west of the target
+      			var west_of_source = (targetX - sourceX) < 0;
+      			if (west_of_source) return "M" + targetX + "," + targetY + "A" + dr + "," + dr + " 0 0,1 " + sourceX + "," + sourceY;
+      			return "M" + sourceX + "," + sourceY + "A" + dr + "," + dr + " 0 0,1 " + targetX + "," + targetY;
+
+      		} else {
+      			return "M0,0,l0,0z";
+      		}
+      	}
+
+      	// Zoom to feature on click
+      	// This is optional but if you use mapstarter.com, you get it for free.
+      	function clicked(d,i) {
+
+      		//Add any other onClick events here
+      		var x, y, k;
+
+      		if (d && centered !== d) {
+      	    // Compute the new map center and scale to zoom to
+      			var centroid = path.centroid(d);
+      			var b = path.bounds(d);
+      			x = centroid[0];
+      			y = centroid[1];
+      			k = .8 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height);
+      			centered = d
+      		} else {
+      			x = width / 2;
+      			y = height / 2;
+      			k = 1;
+      			centered = null;
+      		}
+
+      		// Highlight the new feature
+      		g.selectAll("path")
+      			.classed("highlighted",function(d) {
+      					return d === centered;
+      			})
+      			.style("stroke-width", 1 / k + "px"); // Keep the border width constant
+
+      		//Zoom and re-center the whole map container
+      		//Comment `.transition()` and `.duration()` to eliminate gradual zoom
+      		svg
+      			.transition()
+      			.duration(500)
+      			.attr("transform","translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")");
+      	}
+
+
+
+    </script>
   </body>
 </html>
