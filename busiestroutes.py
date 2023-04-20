@@ -6,6 +6,9 @@ from sklearn.cluster import KMeans
 routes_df = pd.read_csv('Data/routes.csv',sep=',',header=None)
 airports_df = pd.read_csv('Data/airports.csv')
 
+# drop rows where IATA code is NA
+airports_df = airports_df[airports_df['IATA'] != '\\N']
+
 routes_df.rename(columns={2: 'Source Airport',4: 'Destination Airport'}, inplace=True)
 
 print(routes_df.columns)
@@ -36,7 +39,7 @@ plt.show()
 airport_counts = pd.concat([routes_df['Source Airport'], routes_df['Destination Airport']], ignore_index=True)
 airport_counts = airport_counts.value_counts().reset_index(name='Num flights')
 airport_counts = airport_counts.rename(columns={'index': 'Airport'})
-print(airport_counts.loc[(airport_counts['Airport'] == 'ORD')])
+# print(airport_counts.loc[(airport_counts['Airport'] == 'ORD')])
 
 kmeans = KMeans(n_clusters=6, random_state=0).fit(airport_counts[['Num flights']])
 
@@ -56,11 +59,23 @@ print(max_cluster)
 # Print the airports in the cluster with the highest average number of flights
 print(airport_counts[airport_counts['Cluster'] == max_cluster]['Airport'])
 
-plt.scatter(x=airport_counts['Airport'], y=airport_counts['Num flights'], c=airport_counts['Cluster'])
-plt.xticks(rotation=90)
-plt.xlabel('Airport')
-plt.ylabel('Number of flights')
+# Get the altitude of each airport in airport_counts
+airport_counts['Altitude'] = airport_counts['Airport'].map(airports_df.set_index('IATA')['Altitude'])
+
+print(airport_counts)
+
+# Create scatter plot of altitude vs. number of flights for each airport in the clusters
+for cluster in range(6):
+    cluster_airports = airport_counts[airport_counts['Cluster'] == cluster]
+    plt.scatter(cluster_airports['Num flights'], cluster_airports['Altitude'], label=f'Cluster {cluster}')
+
+# plt.scatter(x=airport_counts['Airport'], y=airport_counts['Altitude'], c=airport_counts['Cluster'])
+# plt.xticks(rotation=90)
+plt.xlabel('Number of Flights')
+plt.ylabel('Altitude')
 plt.title('Airport popularity clusters')
+plt.legend()
+plt.xlim(0, airport_counts['Num flights'].max() + 100)
 plt.show()
 
 # Find the ideal altitude to build airports in the future based on the airports in the above cluster

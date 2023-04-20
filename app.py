@@ -24,14 +24,47 @@ route_counts = routes_df.groupby(['Source Airport', 'Destination Airport']).size
 route_counts = route_counts.sort_values(by='Num flights', ascending=False)
 
 # Extract the top 10 busiest routes
-# dfj = json.loads(df.to_json(orient='table',index=False))
 top_routes = route_counts.head(10)
-
-
 top_routes_json = top_routes.to_dict('records')
-print(top_routes_json)
+
+#-------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# Use k-means clustering to cluster the airports based on their popularity (number of flights departing and arriving at each airport)
+airport_counts = pd.concat([routes_df['Source Airport'], routes_df['Destination Airport']], ignore_index=True)
+airport_counts = airport_counts.value_counts().reset_index(name='Num flights')
+airport_counts = airport_counts.rename(columns={'index': 'Airport'})
+# print(airport_counts.loc[(airport_counts['Airport'] == 'ORD')])
+
+kmeans = KMeans(n_clusters=6, random_state=0).fit(airport_counts[['Num flights']])
 
 
+# Print the cluster assignments for each airport
+airport_counts['Cluster'] = kmeans.labels_
+print(airport_counts)
+
+# Calculate the average flight count for each cluster
+cluster_means = airport_counts.groupby('Cluster')['Num flights'].mean()
+
+# Get the cluster with the highest average flight count
+max_cluster = cluster_means.idxmax()
+
+print(max_cluster)
+
+# Print the airports in the cluster with the highest average number of flights
+print(airport_counts[airport_counts['Cluster'] == max_cluster]['Airport'])
+
+# Get the altitude of each airport in airport_counts
+airport_counts['Altitude'] = airport_counts['Airport'].map(airports_df.set_index('IATA')['Altitude'])
+
+print(airport_counts)
+
+# Create scatter plot of altitude vs. number of flights for each airport in the clusters
+for cluster in range(6):
+    cluster_airports = airport_counts[airport_counts['Cluster'] == cluster]
+    plt.scatter(cluster_airports['Num flights'], cluster_airports['Altitude'], label=f'Cluster {cluster}')
+
+
+#FLASK APPS ------------------------------------------------------------------------------------------------------------------------------------------
 
 @app.route('/top_route')
 def top_route():
