@@ -17,7 +17,7 @@
 
       path {
         stroke: white;
-        stroke-width: 2px;
+        stroke-width: 4px;
         fill: lightgrey;
 
 
@@ -28,7 +28,7 @@
 
     	.g path {
     		stroke-width: 1px;
-    		stroke: black;
+    		stroke: rgb(210, 184, 184);
     		fill: #DBDBDB;
     		cursor: pointer;
     	}
@@ -36,19 +36,25 @@
     		fill: tomato;
     	}
     
-
       .bubble {
-        fill-opacity: .5;
+        fill: rgba(224, 200, 200, 0.3);
         stroke: #fff;
-        stroke-width: .5px;
+        stroke-width: 0.01px;
       }
 
+
     	.arcs path {
-    	  stroke-width: 0.05px;
+    	  stroke-width: 0.5px;
     	  stroke: blue;
     	  pointer-events: none;
     	  fill: none;
     	}
+
+      circle:hover > title {
+        background-color: #fff;
+        font-size: 12px;
+      }
+
 
 
     </style>
@@ -60,10 +66,8 @@
     <script type="text/javascript">
 
 
-    var arcdata = JSON.parse(fs.readFileSync('static/path.json').toString());
-
-    var bubbles = [  ]
-
+    var arcdata =[ ];
+    var bubbles = [];
 
       var width = 1000;
       var height = 510;
@@ -98,18 +102,22 @@
 
 
 
-      /*d3.json("arcdata.json", function(error, arcdata) {*/
+      d3.json("static/arcdata.json", function(error, arcdata) {
         	arcs.selectAll("path")
         		.data(arcdata)
         		.enter().append("path")
         		.attr('d', function(d) {
         			return lngLatToArc(d, 'sourceLocation', 'targetLocation', 1); // A bend of 5 looks nice and subtle, but this will depend on the length of your arcs and the visual look your visualization requires. Higher number equals less bend.
             });
-          /*});*/
+          });
 
-        var radius = d3.scale.sqrt()
+          d3.json("static/bubbles.json", function(error, bubbles) {
+        	arcs.selectAll("path")
+        		.data(bubbles)
+        		.enter().append("path")
+        		var radius = d3.scale.sqrt()
         .domain([0, 1e6])
-        .range([0, 15]);
+        .range([0, 1]);
 
           svg.append("g")
               .attr("class", "bubble")
@@ -119,93 +127,13 @@
             .attr("cx", function (d) { console.log(projection(d)); return projection(d)[0]; })
             .attr("cy", function (d) { return projection(d)[1]; })
             .attr("r", function (d) { return d[2]; })
-            .on('mouseover',function(current_bubble) {
-
-
-
-                    d3.select(this)
-                      .transition()
-                      .duration(1000)
-                      .style('stroke', "blue")
-
-                      filtered =  arcdata.filter(function (a) { return a.sourceLocation[0] === current_bubble[0]; })  
-                      nonfiltered = arcdata.filter(function (a) { return a.sourceLocation[0] !== current_bubble[0]; }) 
-
-                      arcs.selectAll("path").remove()
-
-                        arcs.selectAll("path")
-                        .data(filtered)
-                        .enter().append("path")
-                        .style('stroke', "blue")
-                        .style("stroke-width", "0.2")
-                        .attr('d', function(d) {
-                          return lngLatToArc(d, 'sourceLocation', 'targetLocation', 1); // A bend of 5 looks nice and subtle, but this will depend on the length of your arcs and the visual look your visualization requires. Higher number equals less bend.
-                        });
-
-                      })
-
-            .on("mouseout",function(current_bubble) {
-
-                    d3.select(this)
-                      .transition()
-                      .duration(1000)
-                      .style('stroke', "black")
-
-                        arcs.selectAll("path").remove()
-
-                        arcs.selectAll("path")
-                        .data(arcdata)
-                        .enter().append("path")
-                        .style('stroke', "blue")
-                        .attr('d', function(d) {
-                          return lngLatToArc(d, 'sourceLocation', 'targetLocation', 1); // A bend of 5 looks nice and subtle, but this will depend on the length of your arcs and the visual look your visualization requires. Higher number equals less bend.
-                        });
-                      })
-
-
-
-
-
             .style('fill-opacity', 0.5)
             .style('stroke', "black")
-            .style('stroke-width', 0.3)
-            
-
-            /*.attr("r", 1.5);*/
-            /*.attr("r", function(d) { return radius(size); });*/
-
-            /*.attr("cx", function (d) { return d.longitude; })
-            .attr("cy", function (d) { return d.latitude; })*/
-
-
-                        // Create Event Handlers for mouse
-            function handleMouseOver(current_bubble, arcs, arcdata) {  // Add interactivity
-                               // Use D3 to select element, change color and size
-                filtered =  arcdata.filter(function (a) { return a.sourceLocation[1] === current_bubble[0]; })
-                arcs.selectAll("path")
-
-                .data(arcdata)
-                .enter().append("path")
-
-                .style('stroke', "red")
-
-
-
-                .attr('d', function(d) {
-                return lngLatToArc(d, 'sourceLocation', 'targetLocation', 1); // A bend of 5 looks nice and subtle, but this will depend on the length of your arcs and the visual look your visualization requires. Higher number equals less bend.
-            });
-
-              /*d3.select(this)
-                 .attr({
-                  fill: color,
-                  });
-               var mouseover = d;
-               onhover(mouseover,margin,width,height,x,y,xAxis,yAxis);*/
-                }
-
-});
-
-
+            .style('stroke-width', 0.01)
+            .append("title")
+            .text(function(d) { return "Latitude: " + d[0] + ", Longitude: " + d[1] + ", Airport: " + d[3]; });
+    });
+  });
 
       	// This function takes an object, the key names where it will find an array of lng/lat pairs, e.g. `[-74, 40]`
       	// And a bend parameter for how much bend you want in your arcs, the higher the number, the less bend.
@@ -280,8 +208,6 @@
       			.duration(500)
       			.attr("transform","translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")");
       	}
-
-
 
     </script>
   </body>
