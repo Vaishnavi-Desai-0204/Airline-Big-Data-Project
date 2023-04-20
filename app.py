@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request
+import json
 import pandas as pd
 import numpy as np
 import networkx as nx
@@ -23,13 +24,19 @@ route_counts = routes_df.groupby(['Source Airport', 'Destination Airport']).size
 route_counts = route_counts.sort_values(by='Num flights', ascending=False)
 
 # Extract the top 10 busiest routes
+# dfj = json.loads(df.to_json(orient='table',index=False))
 top_routes = route_counts.head(10)
+
+
+top_routes_json = top_routes.to_dict('records')
+print(top_routes_json)
+
+
 
 @app.route('/top_route')
 def top_route():
-    
-    top_routes_json = []
-    print(top_routes_json)
+    with open('static/top_routes_1.json', 'w') as fp:
+        json.dump(top_routes_json, fp)
 
 
     return render_template('top_route.html')
