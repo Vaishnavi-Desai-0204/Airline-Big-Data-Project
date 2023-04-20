@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import pandas as pd
 import numpy as np
 import networkx as nx
@@ -26,27 +26,28 @@ route_counts = route_counts.sort_values(by='Num flights', ascending=False)
 top_routes = route_counts.head(10)
 
 # Create a bar chart of the top 10 busiest routes using Plotly
-fig = go.Figure()
-fig.add_trace(go.Bar(
-    x=top_routes['Source Airport'] + ' to ' + top_routes['Destination Airport'],
-    y=top_routes['Num flights'],
-    name='Top 10 Busiest Routes'
-))
-fig.update_layout(
-    title='Top 10 Busiest Routes',
-    xaxis_title='Route',
-    yaxis_title='Number of flights',
-    xaxis_tickangle=-45
-)
-plot_div = pyo.offline.plot(fig, output_type='div')
+# fig = go.Figure()
+# fig.add_trace(go.Bar(
+#     x=top_routes['Source Airport'] + ' to ' + top_routes['Destination Airport'],
+#     y=top_routes['Num flights'],
+#     name='Top 10 Busiest Routes'
+# ))
+# fig.update_layout(
+#     title='Top 10 Busiest Routes',
+#     xaxis_title='Route',
+#     yaxis_title='Number of flights',
+#     xaxis_tickangle=-45
+# )
+# plot_div = pyo.offline.plot(fig, output_type='div')
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/top_routes')
-def top_routes_chart():
-    return render_template('top_routes.html', plot_div=plot_div)
+@app.route('/top_route')
+def top_route():
+    top_routes_dict = top_routes.to_dict(orient='records')
+    return render_template('top_route.html', top_routes = top_routes.to_json(orient='records'))
 
 @app.route('/centrality')
 def centrality():

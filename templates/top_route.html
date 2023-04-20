@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <title>Top 10 Busiest Routes</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    
+    <!-- <script src="{{ url_for('static', filename='script.js') }}"></script> -->
+    
+    <!-- <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
+    <style>
+
+        body{
+            background-image:url("static/images/flight.jpeg") ;
+        }
+
+        #chart {
+        width: 600px;
+        height: 400px;
+        margin: 0 auto;
+        border: 1px solid #ccc;
+        }
+
+        /* Style for the bars */
+        .bars {
+        fill: #4CAF50;
+        }
+
+        /* Style for the bar labels */
+        .labels {
+        font-size: 14px;
+        font-weight: bold;
+        text-anchor: middle;
+        }
+
+        /* Style for the x-axis labels */
+        .x-axis-label {
+        font-size: 14px;
+        font-weight: bold;
+        text-anchor: middle;
+        }
+
+        /* Style for the y-axis labels */
+        .y-axis-label {
+        font-size: 14px;
+        font-weight: bold;
+        text-anchor: middle;
+        transform: rotate(-90deg);
+        }
+        /* svg {
+          width: 600px;
+          height: 400px;
+          border: 1px solid #ccc;
+          padding: 20px;
+        }
+        .bar {
+          fill: steelblue;
+        }
+        .bar:hover {
+          fill: blue;
+        }
+        .axis {
+          font-size: 14px;
+        }
+        .axis path,
+        .axis line {
+          fill: none;
+          stroke: #ccc;
+        } */
+      </style>
+</head>
+<body>
+    <h1 style="text-align: center">Top 10 Busiest Routes</h1>
+    <div id="chart"></div>
+    <!-- <svg id="chart"></svg> -->
+    
+    <!-- <div id="plot">{{ plot_div|safe }}</div> -->
+    <script>
+        // var top_routes = "{{ top_routes }}";
+        // createBarChart(top_routes);
+
+            // Load the data from Flask
+            d3.json("{{ url_for('top_route') }}", function(error, data) {
+            if (error) throw error;
+            
+            // Parse the JSON data
+            var top_routes = JSON.parse(data);
+
+            // Create the chart
+            var svg = d3.select("#chart")
+                .append("svg")
+                .attr("width", 500)
+                .attr("height", 500);
+
+            var bars = svg.selectAll("rect")
+                .data(top_routes)
+                .enter()
+                .append("rect")
+                .attr("x", function(d, i) { return i * 50; })
+                .attr("y", function(d) { return 500 - d['Num flights'] * 10; })
+                .attr("width", 40)
+                .attr("height", function(d) { return d['Num flights'] * 10; })
+                .attr("fill", "steelblue");
+
+            var labels = svg.selectAll("text")
+                .data(top_routes)
+                .enter()
+                .append("text")
+                .text(function(d) { return d['Source Airport'] + " to " + d['Destination Airport']; })
+                .attr("x", function(d, i) { return i * 50 + 10; })
+                .attr("y", function(d) { return 500 - d['Num flights'] * 10 - 5; })
+                .attr("font-size", "12px")
+                .attr("fill", "white");
+        });
+    </script>
+</body>
+</html>
+
