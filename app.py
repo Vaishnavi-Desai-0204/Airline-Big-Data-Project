@@ -48,6 +48,14 @@ def index():
 def top_routes_chart():
     return render_template('top_routes.html', plot_div=plot_div)
 
+@app.route('/centrality')
+def centrality():
+    return render_template('centrality.html')
+
+@app.route('/routes')
+def routes():
+    return render_template('routes.html')
+
 @app.route('/shortest_path', methods=['POST'])
 def results():
     # Load data
@@ -85,25 +93,28 @@ def results():
         print("One or both airports are not in the dataset.")
     else:
         #shortest_paths = dict(nx.all_pairs_shortest_path_length(g_und))
-        path = nx.shortest_path(g_und, source=source, target=destination)
-        print("The shortest path between", source, "and", destination, "is:", path)
-        arcdata = []
-        for i in range(len(path)-1):
-            source = path[i]
-            target = path[i+1]
-            SLAT1 = airports_df.loc[airports_df['IATA'] == source, 'Latitude'].values[0]
-            SLONG1 = airports_df.loc[airports_df['IATA'] == source, 'Longitude'].values[0]
-            SLAT2 = airports_df.loc[airports_df['IATA'] == target, 'Latitude'].values[0]
-            SLONG2 = airports_df.loc[airports_df['IATA'] == target, 'Longitude'].values[0]
-            arc = {"sourceLocation": [SLONG1, SLAT1], "targetLocation": [SLONG2, SLAT2]}
-            arcdata.append(arc)
+        all_shortest_paths = list(nx.all_shortest_paths(g_und, source=source, target=destination))
+        top_3_paths = all_shortest_paths[:3]
         bubbles = []
-        for i in range(len(path)):
-            airport = path[i]
-            lat = airports_df.loc[airports_df['IATA'] == airport, 'Latitude'].values[0]
-            long = airports_df.loc[airports_df['IATA'] == airport, 'Longitude'].values[0]
-            bubble = [long, lat, 5.0 , airport]
-            bubbles.append(bubble)
+        arcdata = []
+        for path in top_3_paths:
+            for i in range(len(path)-1):
+                source = path[i]
+                target = path[i+1]
+                weight = g_und[source][target]['weight']
+                SLAT1 = airports_df.loc[airports_df['IATA'] == source, 'Latitude'].values[0]
+                SLONG1 = airports_df.loc[airports_df['IATA'] == source, 'Longitude'].values[0]
+                SLAT2 = airports_df.loc[airports_df['IATA'] == target, 'Latitude'].values[0]
+                SLONG2 = airports_df.loc[airports_df['IATA'] == target, 'Longitude'].values[0]
+                arc = {"sourceLocation": [SLONG1, SLAT1], "targetLocation": [SLONG2, SLAT2], "weight": weight}
+                arcdata.append(arc)
+     
+            for i in range(len(path)):
+                airport = path[i]
+                lat = airports_df.loc[airports_df['IATA'] == airport, 'Latitude'].values[0]
+                long = airports_df.loc[airports_df['IATA'] == airport, 'Longitude'].values[0]
+                bubble = [long, lat, 5.0 , airport]
+                bubbles.append(bubble)
 
     with open('static/arcdata.json', 'w') as f:
         json.dump(arcdata, f)

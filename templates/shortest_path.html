@@ -63,6 +63,16 @@
     <script src="http://d3js.org/topojson.v0.min.js"></script>
   </head>
   <body>
+
+    <div class="dropdown">
+      <select id="routeSelect" onchange="updateMap()">
+        <option value="top">Top Route</option>
+        <option value="second">Second Route</option>
+        <option value="third">Third Route</option>
+      </select>
+    </div>
+
+
     <script type="text/javascript">
 
 
@@ -101,15 +111,15 @@
             .on("click",clicked);
 
 
-
-      d3.json("static/arcdata.json", function(error, arcdata) {
-        	arcs.selectAll("path")
-        		.data(arcdata)
-        		.enter().append("path")
-        		.attr('d', function(d) {
-        			return lngLatToArc(d, 'sourceLocation', 'targetLocation', 1); // A bend of 5 looks nice and subtle, but this will depend on the length of your arcs and the visual look your visualization requires. Higher number equals less bend.
+            d3.json("static/arcdata.json", function(error, arcdata) {
+              arcs.selectAll("path")
+                .data(arcdata)
+                .enter().append("path")
+                .attr('d', function(d) {
+                  return lngLatToArc(d, 'sourceLocation', 'targetLocation', 1);
+                })
+                           
             });
-          });
 
           d3.json("static/bubbles.json", function(error, bubbles) {
         	arcs.selectAll("path")
@@ -164,6 +174,7 @@
 
       			// To avoid a whirlpool effect, make the bend direction consistent regardless of whether the source is east or west of the target
       			var west_of_source = (targetX - sourceX) < 0;
+            
       			if (west_of_source) return "M" + targetX + "," + targetY + "A" + dr + "," + dr + " 0 0,1 " + sourceX + "," + sourceY;
       			return "M" + sourceX + "," + sourceY + "A" + dr + "," + dr + " 0 0,1 " + targetX + "," + targetY;
 
