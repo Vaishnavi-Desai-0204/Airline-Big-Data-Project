@@ -110,7 +110,8 @@ def results():
                 airport = path[i]
                 lat = airports_df.loc[airports_df['IATA'] == airport, 'Latitude'].values[0]
                 long = airports_df.loc[airports_df['IATA'] == airport, 'Longitude'].values[0]
-                bubble = [long, lat, 5.0 , airport]
+                name = airports_df.loc[airports_df['IATA'] == airport, 'Name'].values[0]
+                bubble = [long, lat, 5.0 , airport , name]
                 bubbles.append(bubble)
 
     with open('static/arcdata.json', 'w') as f:
