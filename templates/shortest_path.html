@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>D3 World Map</title>
+    <title>World Map</title>
     <style>
 
     body,svg{
@@ -90,17 +90,13 @@
           .attr("width", width)
           .attr("height", height)
 
-
-
       var path = d3.geo.path()
           .projection(projection);
-
 
       var g = svg.append("g");
 
       var arcs = svg.append("g")
           .attr("class","arcs");
-
 
       d3.json("static/world.json", function(error, topology) {
           g.selectAll("path")
@@ -141,7 +137,7 @@
             .style('stroke', "black")
             .style('stroke-width', 0.01)
             .append("title")
-            .text(function(d) { return "Latitude: " + d[0] + ", Longitude: " + d[1] + ", Airport: " + d[3]; });
+            .text(function(d) { return "Latitude: " + d[0] + ", Longitude: " + d[1] + ", Airport: " + d[3] + ", Name: " + d[4]; });
     });
   });
 
