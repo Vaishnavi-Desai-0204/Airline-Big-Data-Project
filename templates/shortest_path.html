@@ -54,27 +54,13 @@
         background-color: #fff;
         font-size: 12px;
       }
-
-
-
     </style>
-
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="http://d3js.org/topojson.v0.min.js"></script>
   </head>
   <body>
 
-    <div class="dropdown">
-      <select id="routeSelect" onchange="updateMap()">
-        <option value="top">Top Route</option>
-        <option value="second">Second Route</option>
-        <option value="third">Third Route</option>
-      </select>
-    </div>
-
-
     <script type="text/javascript">
-
 
     var arcdata =[ ];
     var bubbles = [];
@@ -114,7 +100,7 @@
                 .attr('d', function(d) {
                   return lngLatToArc(d, 'sourceLocation', 'targetLocation', 1);
                 })
-                           
+                
             });
 
           d3.json("static/bubbles.json", function(error, bubbles) {
@@ -137,7 +123,8 @@
             .style('stroke', "black")
             .style('stroke-width', 0.01)
             .append("title")
-            .text(function(d) { return "Latitude: " + d[0] + ", Longitude: " + d[1] + ", Airport: " + d[3] + ", Name: " + d[4]; });
+            .text(function(d) { return "Latitude: " + d[0] + ", Longitude: " + d[1] + ", Airport: " + d[3] + ", Names: " + d[4]; });
+   
     });
   });
 
@@ -215,7 +202,7 @@
       			.duration(500)
       			.attr("transform","translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")");
       	}
-
     </script>
+  
   </body>
 </html>
