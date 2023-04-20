@@ -7,72 +7,101 @@ import json
 from flask import Flask, render_template
 import plotly.graph_objs as go
 import plotly.offline as pyo
+from sklearn.cluster import KMeans
 
 app = Flask(__name__)
-
-# Load the data into a pandas dataframe
-routes_df = pd.read_csv('Data/routes.csv', sep=',', header=None)
-airports_df = pd.read_csv('Data/airports.csv')
-
-# Rename columns
-routes_df.rename(columns={2: 'Source Airport', 4: 'Destination Airport'}, inplace=True)
-
-# Group the routes by origin and destination airports to get the number of flights for each route
-route_counts = routes_df.groupby(['Source Airport', 'Destination Airport']).size().reset_index(name='Num flights')
-
-# Sort the routes by the number of flights in descending order
-route_counts = route_counts.sort_values(by='Num flights', ascending=False)
-
-# Extract the top 10 busiest routes
-top_routes = route_counts.head(10)
-top_routes_json = top_routes.to_dict('records')
-
-#-------------------------------------------------------------------------------------------------------------------------------------------------------
-
-# Use k-means clustering to cluster the airports based on their popularity (number of flights departing and arriving at each airport)
-airport_counts = pd.concat([routes_df['Source Airport'], routes_df['Destination Airport']], ignore_index=True)
-airport_counts = airport_counts.value_counts().reset_index(name='Num flights')
-airport_counts = airport_counts.rename(columns={'index': 'Airport'})
-# print(airport_counts.loc[(airport_counts['Airport'] == 'ORD')])
-
-kmeans = KMeans(n_clusters=6, random_state=0).fit(airport_counts[['Num flights']])
-
-
-# Print the cluster assignments for each airport
-airport_counts['Cluster'] = kmeans.labels_
-print(airport_counts)
-
-# Calculate the average flight count for each cluster
-cluster_means = airport_counts.groupby('Cluster')['Num flights'].mean()
-
-# Get the cluster with the highest average flight count
-max_cluster = cluster_means.idxmax()
-
-print(max_cluster)
-
-# Print the airports in the cluster with the highest average number of flights
-print(airport_counts[airport_counts['Cluster'] == max_cluster]['Airport'])
-
-# Get the altitude of each airport in airport_counts
-airport_counts['Altitude'] = airport_counts['Airport'].map(airports_df.set_index('IATA')['Altitude'])
-
-print(airport_counts)
-
-# Create scatter plot of altitude vs. number of flights for each airport in the clusters
-for cluster in range(6):
-    cluster_airports = airport_counts[airport_counts['Cluster'] == cluster]
-    plt.scatter(cluster_airports['Num flights'], cluster_airports['Altitude'], label=f'Cluster {cluster}')
-
 
 #FLASK APPS ------------------------------------------------------------------------------------------------------------------------------------------
 
 @app.route('/top_route')
 def top_route():
+
+    # Load the data into a pandas dataframe
+    routes_df = pd.read_csv('Data/routes.csv', sep=',', header=None)
+    airports_df = pd.read_csv('Data/airports.csv')
+
+    # drop rows where IATA code is NA
+    airports_df = airports_df[airports_df['IATA'] != '\\N']
+    # airports_df = airports_df[airports_df['Altitude'] != '\\NaN']
+
+    # Rename columns
+    routes_df.rename(columns={2: 'Source Airport', 4: 'Destination Airport'}, inplace=True)
+
+    # Group the routes by origin and destination airports to get the number of flights for each route
+    route_counts = routes_df.groupby(['Source Airport', 'Destination Airport']).size().reset_index(name='Num flights')
+
+    # Sort the routes by the number of flights in descending order
+    route_counts = route_counts.sort_values(by='Num flights', ascending=False)
+
+    # Extract the top 10 busiest routes
+    top_routes = route_counts.head(10)
+    top_routes_json = top_routes.to_dict('records')
     with open('static/top_routes_1.json', 'w') as fp:
         json.dump(top_routes_json, fp)
 
-
     return render_template('top_route.html')
+
+@app.route('/busy_airports')
+def busyairports():
+    # Load the data into a pandas dataframe
+    routes_df = pd.read_csv('Data/routes.csv', sep=',', header=None)
+    airports_df = pd.read_csv('Data/airports.csv')
+
+    # drop rows where IATA code is NA
+    airports_df = airports_df[airports_df['IATA'] != '\\N']
+
+    # Rename columns
+    routes_df.rename(columns={2: 'Source Airport', 4: 'Destination Airport'}, inplace=True)
+
+    # Use k-means clustering to cluster the airports based on their popularity (number of flights departing and arriving at each airport)
+    airport_counts = pd.concat([routes_df['Source Airport'], routes_df['Destination Airport']], ignore_index=True)
+    airport_counts = airport_counts.value_counts().reset_index(name='Num flights')
+    airport_counts = airport_counts.rename(columns={'index': 'Airport'})
+    # print(airport_counts.loc[(airport_counts['Airport'] == 'ORD')])
+
+    kmeans = KMeans(n_clusters=6, random_state=0).fit(airport_counts[['Num flights']])
+
+
+    # Print the cluster assignments for each airport
+    airport_counts['Cluster'] = kmeans.labels_
+    print(airport_counts)
+
+    # Calculate the average flight count for each cluster
+    cluster_means = airport_counts.groupby('Cluster')['Num flights'].mean()
+
+    # Get the cluster with the highest average flight count
+    max_cluster = cluster_means.idxmax()
+
+    print(max_cluster)
+
+    # Print the airports in the cluster with the highest average number of flights
+    print(airport_counts[airport_counts['Cluster'] == max_cluster]['Airport'])
+
+    # Get the altitude of each airport in airport_counts
+    airport_counts['Altitude'] = airport_counts['Airport'].map(airports_df.set_index('IATA')['Altitude'])
+    airport_counts = airport_counts.dropna(subset=['Altitude'])
+    print(airport_counts)
+
+    # file_names = ['cluster_1.json', 'cluster_2.json', 'cluster_3.json', 'cluster_4.json', 'cluster_5.json', 'cluster_6.json']
+
+    # for file_name in file_names:
+
+    # Create scatter plot of altitude vs. number of flights for each airport in the clusters
+    for cluster in range(6):
+        cluster_airports = airport_counts[airport_counts['Cluster'] == cluster]
+        dict_cluster = cluster_airports.to_dict('records')
+        with open(f'static/cluster_{cluster}.json', 'w') as fp:
+            json.dump(dict_cluster, fp)
+    
+
+    #convert airport_counts to a dictionary
+    # airports_count_dict = airport_counts.to_dict('records')
+
+
+
+    # with open('static/airport_counts.json', 'w') as fp:
+    #     json.dump(airports_count_dict, fp)
+    return render_template('busy_airports.html')
 
 @app.route('/')
 def index():
