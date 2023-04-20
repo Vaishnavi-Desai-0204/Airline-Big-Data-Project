@@ -56,12 +56,12 @@ print(max_cluster)
 # Print the airports in the cluster with the highest average number of flights
 print(airport_counts[airport_counts['Cluster'] == max_cluster]['Airport'])
 
-# plt.scatter(x=airport_counts['Airport'], y=airport_counts['Num flights'], c=airport_counts['Cluster'])
-# plt.xticks(rotation=90)
-# plt.xlabel('Airport')
-# plt.ylabel('Number of flights')
-# plt.title('Airport popularity clusters')
-# plt.show()
+plt.scatter(x=airport_counts['Airport'], y=airport_counts['Num flights'], c=airport_counts['Cluster'])
+plt.xticks(rotation=90)
+plt.xlabel('Airport')
+plt.ylabel('Number of flights')
+plt.title('Airport popularity clusters')
+plt.show()
 
 # Find the ideal altitude to build airports in the future based on the airports in the above cluster
 
