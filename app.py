@@ -89,16 +89,23 @@ def busyairports():
     airport_counts['Longitude'] = airport_counts['Airport'].map(airports_df.set_index('IATA')['Longitude'])
     airport_counts = airport_counts.dropna(subset=['Altitude'])
     # print(airport_counts)
-
-    # Create scatter plot of altitude vs. number of flights for each airport in the clusters
+    
+# Create scatter plot of altitude vs. number of flights for each airport in the clusters
+    colors = [ "pink" , "orange" , "yellow" , "red" , "blue", "green" ]
+    size =  [2,13,9,15,7,11]
     for cluster in range(6):
+        cluster_lists = []
         cluster_airports = airport_counts[airport_counts['Cluster'] == cluster]
-        cluster_airports.drop(['Num flights','Cluster','Altitude'], axis = 1)
-        cluster_airports.drop(cluster_airports.columns[[1,2,3]], axis=1, inplace=True)
-        print(cluster_airports)
-        dict_cluster = cluster_airports.to_dict('records')
+        cluster_airports.drop(['Num flights','Cluster','Altitude'], axis = 1, inplace=True)
+        cluster_airports.drop(columns=['Airport'], inplace=True)
+        values = cluster_airports.values.tolist()
+        for val in values:
+            lat, lon = val[1], val[0]
+            val = [lat, lon, size[cluster] , colors[cluster]]
+            cluster_lists.append(val)
         with open(f'static/cluster_{cluster}.json', 'w') as fp:
-            json.dump(dict_cluster, fp)
+            json.dump(cluster_lists, fp)
+
 
     return render_template('busy_airports.html')
 

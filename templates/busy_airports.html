@@ -1,40 +1,248 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="UTF-8">
-  <title>Busiest Airports</title>
-  <script src="https://d3js.org/d3.v6.min.js"></script>
-  <style>
+  <head>
+    <meta charset="utf-8">
+    <title>World Map</title>
+    <style>
 
-    body{
-        background-image: url('static/images/flight.jpeg');
+    body,svg{
+      width: 100%;
+      height: 100%
+    }
+    svg {
+      margin: 0;
+      display: inherit;
+
     }
 
-    .busiest_airports{
-        text-align: center;
-    }
+      path {
+        stroke: white;
+        stroke-width: 4px;
+        fill: lightgrey;
 
-  </style>
 
+      }
+
+    	/* For centering */
+
+
+    	.g path {
+    		stroke-width: 1px;
+    		stroke: rgb(210, 184, 184);
+    		fill: #DBDBDB;
+    		cursor: pointer;
+    	}
+    	.g path:hover, path.highlighted {
+    		fill: tomato;
+    	}
+    
+      .bubble {
+        fill: red;
+        stroke: #fff;
+        fill-opacity: 1;
+        stroke-width: 0.01px;
+      }
+
+    	.arcs path {
+    	  stroke-width: 0.5px;
+    	  stroke: blue;
+    	  pointer-events: none;
+    	  fill: none;
+    	}
+
+      circle:hover > title {
+        background-color: #fff;
+        font-size: 12px;
+      }
+    </style>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://d3js.org/topojson.v0.min.js"></script>
+  </head>
   <body>
 
-      <div class="busiest_airports">
-        <h1>Busiest Airports</h1>
-        <p>Based on number of flights operating out of each Airport</p>
-      </div>
+    <script type="text/javascript">
 
-      <div id="plot"></div>
-      <script>
-          //setting margin for the svg
-          var margin = { top: 20, right: 20, bottom: 50, left: 70 },
-          width = 600 - margin.left - margin.right,
-          height = 400 - margin.top - margin.bottom;
+    var arcdata =[ ];
+    var bubbles = [];
 
-      </script>
+      var width = 1000;
+      var height = 510;
+      var height2 = 370
 
+      var projection = d3.geo.mercator().scale(162);
 
+      var svg = d3.select("body").append("svg")
+          .attr("viewBox", "0 0 " + width + " " + height2)
+          .attr("width", width)
+          .attr("height", height)
+
+      var path = d3.geo.path()
+          .projection(projection);
+
+      var g = svg.append("g");
+
+      var arcs = svg.append("g")
+          .attr("class","arcs");
+
+      d3.json("static/world.json", function(error, topology) {
+          g.selectAll("path")
+            .data(topojson.object(topology, topology.objects.countries)
+                .geometries)
+            .enter().append("path")
+            .attr("d", path)
+
+          d3.json("static/cluster_3.json", function(error, bubbles) {
+        	arcs.selectAll("path")
+        		.data(bubbles)
+        		.enter().append("path")
+        		var radius = d3.scale.sqrt()
+        .domain([0, 1e6])
+        .range([0, 1]);
+
+          svg.append("g")
+              .attr("class", "bubble")
+          svg.selectAll("circle")
+            .data(bubbles).enter()
+            .append("circle")
+            .attr("cx", function (d) { console.log(projection(d)); return projection(d)[0]; })
+            .attr("cy", function (d) { return projection(d)[1]; })
+            .attr("r", function (d) { return d[2]; })
+            .style('fill-opacity', 0.5)
+            .style('stroke', "red")
+            .style('stroke-width', 0.01)
+            .style('fill', function(d) { return d[3]; })
+            .append("title")
+            .text(function(d) { return "Latitude: " + d[0] + ", Longitude: " + d[1]; });
+   
+    })
+    
+    d3.json("static/cluster_1.json", function(error, bubbles) {
+        	arcs.selectAll("path")
+        		.data(bubbles)
+        		.enter().append("path")
+        		var radius = d3.scale.sqrt()
+        .domain([0, 1e6])
+        .range([0, 1]);
+
+          svg.append("g")
+              .attr("class", "bubble")
+          svg.selectAll("circle")
+            .data(bubbles).enter()
+            .append("circle")
+            .attr("cx", function (d) { console.log(projection(d)); return projection(d)[0]; })
+            .attr("cy", function (d) { return projection(d)[1]; })
+            .attr("r", function (d) { return d[2]; })
+            .style('fill-opacity', 0.5)
+            .style('stroke', "red")
+            .style('stroke-width', 0.01)
+            .style('fill', function(d) { return d[3]; })
+            .append("title")
+            .text(function(d) { return "Latitude: " + d[0] + ", Longitude: " + d[1]; });
+   
+    })
+
+    d3.json("static/cluster_5.json", function(error, bubbles) {
+        	arcs.selectAll("path")
+        		.data(bubbles)
+        		.enter().append("path")
+        		var radius = d3.scale.sqrt()
+        .domain([0, 1e6])
+        .range([0, 1]);
+
+          svg.append("g")
+              .attr("class", "bubble")
+          svg.selectAll("circle")
+            .data(bubbles).enter()
+            .append("circle")
+            .attr("cx", function (d) { console.log(projection(d)); return projection(d)[0]; })
+            .attr("cy", function (d) { return projection(d)[1]; })
+            .attr("r", function (d) { return d[2]; })
+            .style('fill-opacity', 0.5)
+            .style('stroke', "red")
+            .style('stroke-width', 0.01)
+            .style('fill', function(d) { return d[3]; })
+            .append("title")
+            .text(function(d) { return "Latitude: " + d[0] + ", Longitude: " + d[1]; });
+   
+    })
+
+    d3.json("static/cluster_2.json", function(error, bubbles) {
+        	arcs.selectAll("path")
+        		.data(bubbles)
+        		.enter().append("path")
+        		var radius = d3.scale.sqrt()
+        .domain([0, 1e6])
+        .range([0, 1]);
+
+          svg.append("g")
+              .attr("class", "bubble")
+          svg.selectAll("circle")
+            .data(bubbles).enter()
+            .append("circle")
+            .attr("cx", function (d) { console.log(projection(d)); return projection(d)[0]; })
+            .attr("cy", function (d) { return projection(d)[1]; })
+            .attr("r", function (d) { return d[2]; })
+            .style('fill-opacity', 0.5)
+            .style('stroke', "red")
+            .style('stroke-width', 0.01)
+            .style('fill', function(d) { return d[3]; })
+            .append("title")
+            .text(function(d) { return "Latitude: " + d[0] + ", Longitude: " + d[1]; });
+   
+    })
+
+    d3.json("static/cluster_4.json", function(error, bubbles) {
+        	arcs.selectAll("path")
+        		.data(bubbles)
+        		.enter().append("path")
+        		var radius = d3.scale.sqrt()
+        .domain([0, 1e6])
+        .range([0, 1]);
+
+          svg.append("g")
+              .attr("class", "bubble")
+          svg.selectAll("circle")
+            .data(bubbles).enter()
+            .append("circle")
+            .attr("cx", function (d) { console.log(projection(d)); return projection(d)[0]; })
+            .attr("cy", function (d) { return projection(d)[1]; })
+            .attr("r", function (d) { return d[2]; })
+            .style('fill-opacity', 0.5)
+            .style('stroke', "red")
+            .style('stroke-width', 0.01)
+            .style('fill', function(d) { return d[3]; })
+            .append("title")
+            .text(function(d) { return "Latitude: " + d[0] + ", Longitude: " + d[1]; });
+   
+    })
+
+    d3.json("static/cluster_0.json", function(error, bubbles) {
+        	arcs.selectAll("path")
+        		.data(bubbles)
+        		.enter().append("path")
+        		var radius = d3.scale.sqrt()
+        .domain([0, 1e6])
+        .range([0, 1]);
+
+          svg.append("g")
+              .attr("class", "bubble")
+          svg.selectAll("circle")
+            .data(bubbles).enter()
+            .append("circle")
+            .attr("cx", function (d) { console.log(projection(d)); return projection(d)[0]; })
+            .attr("cy", function (d) { return projection(d)[1]; })
+            .attr("r", function (d) { return d[2]; })
+            .style('fill-opacity', 0.5)
+            .style('stroke', "red")
+            .style('stroke-width', 0.01)
+            .style('fill', function(d) { return d[3]; })
+            .append("title")
+            .text(function(d) { return "Latitude: " + d[0] + ", Longitude: " + d[1]; });
+   
+    });
+    
+  });
+    </script>
+  
   </body>
-
-</head>
-
 </html>
