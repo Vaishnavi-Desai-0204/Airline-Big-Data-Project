@@ -22,19 +22,27 @@
 			overflow: hidden;
 			position: relative;
 			display: flex;
+			flex-direction: column;
 			justify-content: center;
 			align-items: center;
 		}
 
 		.square img {
-			max-width: 150%;
-			max-height: 150%;
-			object-fit: cover;
+			max-width: 120%;
+			max-height: 135%;
+			object-fit: fill;
 			transition: transform 0.2s ease-in-out;
 		}
 
 		.square:hover img {
 			transform: scale(1.1);
+		}
+
+		.square p {
+			margin: 10px;
+			font-size: 14px;
+			color: #333;
+			text-align: justify;
 		}
 
 		div {
@@ -48,33 +56,49 @@
 			height: 100%;
 			background-color: rgba(0, 0, 0, 0.8);
 		}
+		p{
+			font-size: 14px;
+			max-width: 500px;
+			color: #eee;
+			justify-self: center;
+			align-items: center;
+			margin: 20px;
+			right: auto;
+		}
 	</style>
 </head>
 <body>
 	<div class="square">
-		<img src="static/images/output.png" onclick="showImage('static/images/output.png')">
+		<img src="static/images/output1.png" onclick="showImage('static/images/output1.png', 'This is aggggggggggg<br>ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg paragraph of text for the first image.')">
+		
 	</div>
 	<div class="square">
-		<img src="static/images/Airlines.png" onclick="showImage('static/images/Airlines.png')">
+		<img src="static/images/Airlines.png" onclick="showImage('static/images/Airlines.png', 'This is a paragraph of text for the second image.')">
+		
 	</div>
 	<div class="square">
-		<img src="static/images/JUMPS.png" onclick="showImage('static/images/JUMPS.png')">
+		<img src="static/images/JUMPS.png" onclick="showImage('static/images/JUMPS.png', 'This is a paragraph of text for the third image.')">
+		
 	</div>
-
 
 	<script>
-		function showImage(url) {
+		function showImage(url, text) {
 			// create a new image element
 			var img = new Image();
 
 			// set the source of the new image to the clicked image URL
 			img.src = url;
 
-			// create a new div element to hold the image
+			// create a new div element to hold the image and text
 			var div = document.createElement('div');
 
 			// add the image to the new div element
 			div.appendChild(img);
+
+			// create a new paragraph element for the text and add it to the new div element
+			var p = document.createElement('p');
+			p.innerHTML = text;
+			div.appendChild(p);
 
 			// add the new div element to the body of the page
 			document.body.appendChild(div);
@@ -87,3 +111,4 @@
 	</script>
 </body>
 </html>
+
