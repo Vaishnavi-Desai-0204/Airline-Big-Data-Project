@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>My Website</title>
+	<style>
+		.header {
+			background-color: #333;
+			color: #fff;
+			padding: 10px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+		.logo {
+			display: flex;
+			align-items: center;
+		}
+		.logo img {
+			height: 50px;
+			margin-right: 10px;
+		}
+		.menu {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+			display: flex;
+		}
+		.menu li {
+			margin-right: 10px;
+		}
+		.menu a {
+			color: #fff;
+			text-decoration: none;
+			font-weight: bold;
+		}
+	</style>
+</head>
+<body>
+	<header class="header">
+		<div class="logo">
+			<img src="{{ url_for('static', filename='images/logo.png') }}">
+			<h1>My Website</h1>
+		</div>
+		<nav>
+			<ul class="menu">
+				<li><a href="#">Home</a></li>
+				<li><a href="#">About</a></li>
+				<li><a href="#">Services</a></li>
+				<li><a href="#">Contact</a></li>
+			</ul>
+		</nav>
+	</header>
+	
+	<!-- Rest of the webpage content goes here -->
+	
+</body>
+</html>
