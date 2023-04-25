@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Analytics Webpage</title>
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/968e4c0525.js" crossorigin="anonymous"></script>
     <style>
         
         /* ----------------------------- */
@@ -19,7 +20,7 @@
             left: 0;
             right: 0;
             background-color:#080d2d;
-            height: 70px;
+            height: 80px;
             display: flex; 
             justify-content: space-between;
             /* flex-direction: row; */
@@ -45,15 +46,36 @@
         .main-screen{
             height: 100vh;
             display: flex;
-            margin-top: 70px;
+            margin-top: 80px;
+            flex-wrap: wrap;
         }
 
         #left-menu{
             border-top-width: 2px;
             border-color: #a9a8ac;
-            width: 15%;
+            width: 20%;
             background-color:#080d2d;
             padding: 1.5rem;
+        }
+
+        #left-menu .menu-heading {
+            display: flex;
+            align-items: center;
+            color: rgb(216, 182, 89);
+            font-weight: bold;
+            font-family: Arial, sans-serif;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        #left-menu .menu-heading i {
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+
+        #left-menu ul {
+            margin-top: 0;
+            padding-left: 1.5rem;
         }
 
         #left-menu li{
@@ -71,23 +93,31 @@
         }
 
         #main-content {
-            flex-grow: 1;
             padding: 1rem;
+            justify-content: flex-start;
         }
         .container {
             display: flex;
             flex-wrap: wrap;
-            justify-content: center;
-            /* align-items: center; */
             gap: 2rem;
             height: 100%;
         }
         .box {
             width: 200px;
             height: 200px;
-            margin: 0;
+            margin: 10px;
             background-color: #fff;
             box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+            /* flex-basis: calc(20% - 10px); */
+            content: url("static/images/airport_popularity.png");
+            border-radius: 20px;
+            
+        }
+        .graph{
+            content: url("static/images/airport_popularity.png");
+            border-radius: 20px;
+            width: 120px;
+            height: 120px;
         }
     </style>
 </head>
@@ -101,6 +131,10 @@
         </div>
         <div class="main-screen">
             <div id="left-menu">
+                <div class="menu-heading">
+                    <i class="fas fa-chart-line"></i>  Analyses
+                   
+                </div>
                 <ul>
                     <li style="margin-bottom: 25px;"><a href="{{ url_for('routes') }}">Routes</a></li>
                     <li style="margin-bottom: 25px;"><a href="{{ url_for('top_route') }}">Busiest Routes</a></li>
@@ -111,7 +145,9 @@
             </div>  
             <div id="main-content">
                 <div class="container">
-                  <div class="box"></div>
+                  <div class="box">
+                    <!-- <img class="graph" src="{{ url_for('static', filename='images/airport_popularity.png') }}"></div> -->
+                  </div>
                   <div class="box"></div>
                   <div class="box"></div>
                   
