@@ -1,93 +1,281 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    
-    <title>Flask App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Analytics Webpage</title>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/968e4c0525.js" crossorigin="anonymous"></script>
+   
     <style>
-        body {
-          background-image: url("static/images/flight.jpg");
-          font-family: Arial, sans-serif;
-          text-align: center;
-          background-size: cover;
+        
+        /* ----------------------------- */
+    
+        .body-bg{
+            background-image: url('static/images/flight.jpg');
+            background-size: cover;
         }
-        h1 {
-          font-family: 'Roboto', sans-serif;
-          font-size: 48px;
-          text-align: center;
+        .header{
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: #045255ad;
+            height: 80px;
+            display: flex;
+            justify-content: space-between;
+            }
+
+
+        .title{
+            left: 10%;
+            position: relative;
+            align-self:center;
+            justify-content: right;
+            font-family: Garamond, serif;
+            font-weight: bold;
+            font-size: 2.5rem;
+            color: rgb(248, 247, 244);
+            padding-left: 30%;
         }
-        form {
-          display: inline-block;
-          text-align: left;
+
+        .course{
+            font-size: larger;
+            align-self: center;
+            font-family: Garamond, serif;
+            font-style: italic;
+            color: white;
+            flex-grow: 1;
+            padding-right: 20px;
         }
-        label {
-          display: block;
-          margin-bottom: 5px;
+
+        .main-screen{
+            height: 100vh;
+            display: flex;
+            margin-top: 80px;
+            /* flex-wrap: wrap; */
         }
-        input[type="text"], input[type="submit"] {
-          padding: 10px;
-          border: none;
-          border-radius: 5px;
-          margin-bottom: 10px;
-          width: 100%;
-          box-sizing: border-box;
+
+        #left-menu{
+            height: 100vh;
+            border-top-width: 2px;
+            border-color: #a9a8ac;
+            width: 15%;
+            background-color :  #0b8c91ad;
+            padding: 1.5rem;
+            position: relative;
         }
-        input[type="submit"] {
-          background-color: #008CBA;
-          color: white;
-          cursor: pointer;
+
+        #left-menu .menu-heading {
+            display:block;
+            align-items: center;
+            color:  white;
+            font-weight: bold;
+            font-family: Garamond, serif;
+            margin-bottom: 1rem;
+            font-size: 2rem;
         }
-        input[type="submit"]:hover {
-          background-color: #006B9E;
+
+        #left-menu .menu-heading i {
+            font-size: 1.5rem;
+         
         }
-      </style>
+
+        #left-menu ul {
+            margin-top: 0;
+            padding-left: 1rem;
+        }
+
+        #left-menu li{
+            color: aliceblue;
+            font-weight: bold; 
+            font-family: Garamond, serif;
+            font-size: 1.3rem;
+            transition: background-color 0.3s ease-in-out;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+        }
+
+        #left-menu li:hover {
+            background-color: rgba(255, 255, 255, 0.341);
+            border-radius: 10px;
+        }
+
+        .left-menu-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+        .left-menu-item i {
+            margin-right: 10px;
+        }
+
+        .left-menu-item span {
+            flex: 1;
+        }
+
+        #main-content {
+            padding: 1rem;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+            /* margin-left: 20%; */
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            height: 100%;
+        }
+
+        .box {
+            width: 200px;
+            height: 200px;
+            margin: 10px;
+            background-color: #fff;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+            /* flex-basis: calc(20% - 10px); */
+            content: url("static/images/airport_popularity.png");
+            border-radius: 20px;
+            
+        }
+
+        .graph{
+            content: url("static/images/airport_popularity.png");
+            border-radius: 20px;
+            width: 120px;
+            height: 120px;
+        }
+
+        .square {
+			/* display: inline-block; */
+			margin: 50px;
+			width: 300px;
+			height: 200px;
+			border-radius: 5px;
+			background-color: #eee;
+			text-align: center;
+			overflow: hidden;
+			/* position: relative; */
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.square img {
+			max-width: 100%;
+			max-height: 105%;
+			object-fit: fill;
+			transition: transform 0.2s ease-in-out;
+		}
+
+		.square:hover img {
+			transform: scale(1.1);
+		}
+
+		.square p {
+			margin: 10px;
+			font-size: 14px;
+			color: #333;
+			text-align: justify;
+		}
+
+        #modal {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0, 0, 0, 0.8);
+		}
+
+		p{
+			font-size: 14px;
+			max-width: 500px;
+			color: #eee;
+			justify-self: center;
+			align-items: center;
+			margin: 20px;
+			right: auto;
+		}
+
+    </style>
+    <script>
+		function showImage(url, text) {
+			// create a new image element
+			var img = new Image();
+
+			// set the source of the new image to the clicked image URL
+			img.src = url;
+
+			// create a new div element to hold the image and text
+			var div = document.createElement('div');
+            div.id = "modal";
+
+			// add the image to the new div element
+			div.appendChild(img);
+
+			// create a new paragraph element for the text and add it to the new div element
+			var p = document.createElement('p');
+			p.innerHTML = text;
+			div.appendChild(p);
+
+			// add the new div element to the body of the page
+			document.body.appendChild(div);
+
+			// add a click event to the new div element to remove it when clicked
+			div.onclick = function() {
+				document.body.removeChild(div);
+			};
+		}
+	</script>
 </head>
 <body>
-    <h1>OpenFlights Data Analysis</h1>
-    <h2>By :- Vaishnavi Desai and Sruthi Jayachandran</h2>
-    <p>Click the button below to see the top 10 busiest routes:</p>
-    <form action="/top_route">
-        <input type="submit" value="Show top routes">
-    </form>
+    <div class="body-bg">
+        <div class="header">
+            <div class="logo"></div>
+            <div class="title" style="text-align:center">
+                Open Flights Data Analysis
+            </div>
+            <div class="course" style="text-align:right">
+                CS 430/630 Introduction to Big Data
+            </div>
+        </div>
+        <div class="main-screen">
+            <div id="left-menu">
+                <div class="menu-heading">
+                    <i class="fa-solid fa-chart-simple"></i>  Analysis
+                   
+                </div>
+                <ul>
+                    <li style="margin-bottom: 25px;"><a href="{{ url_for('routes') }}"><div class="left-menu-item"><i class="fa-regular fa-map"></i><span>Routes</span></div></a></li>
+                    <li style="margin-bottom: 25px;"><a href="{{ url_for('top_route') }}"><div class="left-menu-item"><i class="fa-solid fa-route"></i><span>Busiest Routes</span></div></a></li>
+                    <li style="margin-bottom: 25px;"><a href="{{ url_for('busy_airports') }}"><div class="left-menu-item"><i class="fa-solid fa-plane"></i><span>Busiest Airports</span></div></a></li>
+                    <li style="margin-bottom: 25px;"><a href="{{ url_for('centrality') }}"><div class="left-menu-item"><i class="fa-brands fa-hubspot"></i><span>Centrality</span></div></a></li>
+                    <li style="margin-bottom: 25px;"><a href="{{ url_for('index') }}"><div class="left-menu-item"><i class="fa-solid fa-circle-nodes"></i><span>Flight Mapper</span></div></a></li>
+                </ul>
+            </div>  
+            <div id="main-content">
+                <div class="container">
+                      <form action="/shortest_path" method="post">
+                        <label for="source">Source Airport:</label>
+                        <input type="text" id="source" name="source">
+                        <label for="destination">Destination Airport:</label>
+                        <input type="text" id="destination" name="destination">
+                        <input type="submit" value="Find Shortest Path">
+                      </form>
+                </div>
 
-    <h3>View Busiest airports based on the number of operating flights</h3>
-    <form action="/busy_airports">
-      <input type="submit" value="Show Busiest Airports">
-    </form>
+            </div>  
+        </div>
 
-    <h1>Flight Mapper</h1>
-    <form action="/shortest_path" method="post">
-      <label for="source">Source Airport:</label>
-      <input type="text" id="source" name="source">
-      <label for="destination">Destination Airport:</label>
-      <input type="text" id="destination" name="destination">
-      <input type="submit" value="Find Shortest Path">
-    </form>
+    </div>
 
-    <p>Click the button below to see the top hubs:</p>
-    <form action="/centrality">
-        <input type="submit" value="Centrality">
-    </form>
-
-
-    <p>Click the button below to see the routes:</p>
-    <form action="/routes">
-        <input type="submit" value="Routes">
-    </form>
-
-    <p>Click the button below to see the routes:</p>
-    <form action="/stats">
-        <input type="submit" value="Statistics">
-    </form>    
-
-    <p>Click the button below to see the mainpage:</p>
-    <form action="/main_page">
-        <input type="submit" value="main">
-    </form>
-
-    <p>Click the button below to see the airport_kmeans:</p>
-    <form action="/airport_kmeans">
-        <input type="submit" value="kmeans">
-    </form>
-
+   
+    
 </body>
 </html>

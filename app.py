@@ -174,11 +174,11 @@ def busy_airports():
 
     return render_template('busy_airports.html')
 
-@app.route('/main_page')
+@app.route('/')
 def main_page():
     return render_template('main_page.html')
 
-@app.route('/')
+@app.route('/index')
 def index():
     return render_template('index.html')
 
@@ -195,7 +195,7 @@ def routes():
     return render_template('routes.html')
 
 @app.route('/shortest_path', methods=['POST'])
-def results():
+def shortest_path():
     # Load data
     routes = pd.read_csv('Data/routes.csv', sep=',', header=None)
     routes = routes.drop([0, 1, 3, 5, 6, 7, 8], axis=1)
