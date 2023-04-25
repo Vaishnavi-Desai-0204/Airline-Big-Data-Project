@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Analytics Webpage</title>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        
+        /* ----------------------------- */
+    
+     
+        .header{
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color:#020a3d;
+            height: 70px;
+            display: flex; 
+            justify-content: space-between;
+            /* flex-direction: row; */
+            
+        }
+        .logo{
+            content: url("static/images/logo.png");
+            width: auto;
+            height: auto;
+        }
+
+        .course{
+            font-size: larger;
+            align-self: center;
+            font-family: 'Times New Roman', Times, serif;
+            font-style: italic;
+            color: white;
+            flex-grow: 1;
+            padding-right: 20px;
+        }
+
+        .main-screen{
+            height: 100vh;
+            display: flex;
+            margin-top: 70px;
+        }
+
+        #left-menu{
+            border-top-width: 2px;
+            border-color: #a9a8ac;
+            width: 20%;
+            background-color:#020a3d;
+            padding: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="body-bg">
+        <div class="header">
+            <div class="logo"></div>
+            <div class="course" style="text-align:right">
+                CS 430/630 Introduction to Big Data
+            </div>
+        </div>
+        <div class="main-screen">
+            <div id="left-menu">
+                <ul>
+                    <li><a href="{{ url_for('routes') }}">Routes</a></li>
+                    <li><a href="#">Dashboard 2</a></li>
+                    <li><a href="#">Dashboard 3</a></li>
+                    <li><a href="#">Dashboard 4</a></li>
+                    <li><a href="#">Dashboard 5</a></li>
+                </ul>
+            </div>    
+        </div>
+    </div>
+
+   
+    
+</body>
+</html>
