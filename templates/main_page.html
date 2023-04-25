@@ -14,45 +14,29 @@
         .body-bg{
             background-image: url('static/images/flight.jpg');
             background-size: cover;
-            /* position: fixed; */
-            
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: auto;
-            z-index: -1;
         }
         .header{
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            background-color:#080d2d;
+            background-color: #045255ad;
             height: 80px;
-            display: flex; 
+            display: flex;
             justify-content: space-between;
-            z-index: 1;
-            
-        }
+            }
 
-        .logo{
-            content: url("static/images/logo1.png");
-            width: auto;
-            height: auto;
-            margin-left: 10px;
-        }
 
         .title{
-            align-self: center;
-            justify-content: center;
-            text-align: center;
+            left: 10%;
+            position: relative;
+            align-self:center;
+            justify-content: right;
             font-family: Garamond, serif;
             font-weight: bold;
             font-size: 2.5rem;
-            color: rgb(216, 182, 89);
-            /* padding-left: 30%; */
-            flex-grow: 1;
-            margin: 0 auto; 
+            color: rgb(248, 247, 244);
+            padding-left: 30%;
         }
 
         .course{
@@ -61,50 +45,48 @@
             font-family: Garamond, serif;
             font-style: italic;
             color: white;
-            /* flex-grow: 1; */
+            flex-grow: 1;
             padding-right: 20px;
         }
 
         .main-screen{
-            /* height: 100vh; */
+            height: 100vh;
             display: flex;
             margin-top: 80px;
-           
+            /* flex-wrap: wrap; */
         }
 
-        .left-menu{
+        #left-menu{
             height: 100vh;
             border-top-width: 2px;
             border-color: #a9a8ac;
-            width: 20%;
-            background-color:#080d2d;
+            width: 15%;
+            background-color :  #0b8c91ad;
             padding: 1.5rem;
-            position: fixed; 
-            overflow-y: auto;
-            
+            position: relative;
         }
 
-        .left-menu .menu-heading {
-            display: flex;
+        #left-menu .menu-heading {
+            display:block;
             align-items: center;
-            color: rgb(216, 182, 89);
+            color:  white;
             font-weight: bold;
             font-family: Garamond, serif;
             margin-bottom: 1rem;
             font-size: 2rem;
         }
 
-        .left-menu .menu-heading i {
+        #left-menu .menu-heading i {
             font-size: 1.5rem;
-            margin-right: 0.5rem;
+         
         }
 
-        .left-menu ul {
+        #left-menu ul {
             margin-top: 0;
-            padding-left: 1.5rem;
+            padding-left: 1rem;
         }
 
-        .left-menu li{
+        #left-menu li{
             color: aliceblue;
             font-weight: bold; 
             font-family: Garamond, serif;
@@ -114,7 +96,7 @@
             border-radius: 10px;
         }
 
-        .left-menu li:hover {
+        #left-menu li:hover {
             background-color: rgba(255, 255, 255, 0.341);
             border-radius: 10px;
         }
@@ -133,13 +115,11 @@
             flex: 1;
         }
 
-        .main-content {
-            /* padding: 1rem; */
-            /* justify-content: flex-start; */
-            /* flex-wrap: wrap; */
-            flex: 1;
-           
-            margin-left: 20%; 
+        #main-content {
+            padding: 1rem;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+            /* margin-left: 20%; */
         }
         .container {
             display: flex;
@@ -170,8 +150,8 @@
         .square {
 			/* display: inline-block; */
 			margin: 50px;
-			width: 400px;
-			height: 300px;
+			width: 300px;
+			height: 200px;
 			border-radius: 5px;
 			background-color: #eee;
 			text-align: center;
@@ -184,8 +164,8 @@
 		}
 
 		.square img {
-			max-width: 120%;
-			max-height: 135%;
+			max-width: 100%;
+			max-height: 105%;
 			object-fit: fill;
 			transition: transform 0.2s ease-in-out;
 		}
@@ -222,21 +202,6 @@
 			margin: 20px;
 			right: auto;
 		}
-
-        .rect{
-            margin: 50px;
-            margin-right: 20px;
-			width: 950px;
-			height: 300px;
-			border-radius: 5px;
-			background-color: #eee;
-			text-align: center;
-			overflow: hidden;
-			display: flex;
-			/* flex-direction: column; */
-			justify-content: center;
-			align-items: center;
-        }
 
     </style>
     <script>
@@ -281,7 +246,7 @@
             </div>
         </div>
         <div class="main-screen">
-            <div class="left-menu">
+            <div id="left-menu">
                 <div class="menu-heading">
                     <i class="fa-solid fa-chart-simple"></i>  Analysis
                    
@@ -294,7 +259,7 @@
                     <li style="margin-bottom: 25px;"><a href="{{ url_for('results') }}"><div class="left-menu-item"><i class="fa-solid fa-circle-nodes"></i><span>Flight Mapper</span></div></a></li>
                 </ul>
             </div>  
-            <div class="main-content">
+            <div id="main-content">
                 <div class="container">
                     
                     <div class="square">
@@ -308,10 +273,6 @@
                         <img src="static/images/Airlines.png" onclick="showImage('static/images/Airlines.png', 'This is a paragraph of text for the second image.')">
                     </div>
                     <div class="square">
-                        <img src="static/images/JUMPS.png" onclick="showImage('static/images/JUMPS.png', 'This is a paragraph of text for the third image.')">
-                        
-                    </div>
-                    <div class="rect">
                         <img src="static/images/JUMPS.png" onclick="showImage('static/images/JUMPS.png', 'This is a paragraph of text for the third image.')">
                         
                     </div>
