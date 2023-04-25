@@ -32,7 +32,15 @@
             display: flex; 
             justify-content: space-between;
             z-index: 1;
+<<<<<<< Updated upstream
         }
+=======
+<<<<<<< HEAD
+            }
+=======
+        }
+>>>>>>> a688b5b4c181304cffd73422813af8b989950ef1
+>>>>>>> Stashed changes
 
         
 
@@ -205,8 +213,9 @@
 		}
 
 		p{
-			font-size: 14px;
-			max-width: 500px;
+            margin-top: 10px;
+			font-size: 25px;
+			max-width: 700px;
 			color: #eee;
 			justify-self: center;
 			align-items: center;
@@ -291,9 +300,12 @@
                     <div class="square">
                         <img src="static/images/airport_popularity.png" onclick="showImage('static/images/airport_popularity.png', 'This is the scatter plot for airport popularity.')">
                     </div>
+                    <div class="square">
+                        <img src="static/images/bargraph.png" onclick="showImage('static/images/bargraph.png', 'Distribution of the weights of the flights:<br> Mostly flights are covered by only one airline, representing more generally regional flights, as the histogram shows.<br>The highest frequency of weights is in the range of 1-2, indicating that most flights have low weight.The histogram is right-skewed, indicating that there are fewer flights with higher weights.Most flights are only covered by one airline, which means they are usually regional flights. There are some flights that have more than one airline covering them, but these are less common.')">
+                    </div>
 
                     <div class="square">
-                        <img src="static/images/output1.png" onclick="showImage('static/images/output1.png', 'This is aggggggggggg<br>ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg paragraph of text for the first image.')">
+                        <img src="static/images/output1.png" onclick="showImage('static/images/output1.png', 'The graph shows the distribution of the number of connections (degree) that each airport has in the network. It shows that most airports have only a few connections, while a few airports have a lot of connections (known as hubs).The blue line represents a theoretical model that approximates the distribution of connections to follow a power law. This means that the probability of an airport having a high number of connections decreases very rapidly as the number of connections increases.')">
                     </div>
                     <div class="square">
                         <img src="static/images/Airlines.png" onclick="showImage('static/images/Airlines.png', 'This is a paragraph of text for the second image.')">
