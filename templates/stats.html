@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>My Statistical Data</title>
+	<style>
+		.square {
+			display: inline-block;
+			margin: 10px;
+			width: 300px;
+			height: 300px;
+			border-radius: 20px;
+			background-color: #eee;
+			text-align: center;
+			overflow: hidden;
+			position: relative;
+		}
+
+		.square img {
+			max-width: 100%;
+			max-height: 100%;
+			object-fit: fill;
+			transition: transform 0.2s ease-in-out;
+		}
+
+		.square:hover img {
+			transform: scale(1.1);
+		}
+	</style>
+</head>
+<body>
+	<div class="square">
+		<img src="https://example.com/image1.jpg" onclick="showImage('https://example.com/image1.jpg')">
+	</div>
+	<div class="square">
+		<img src="https://example.com/image2.jpg" onclick="showImage('https://example.com/image2.jpg')">
+	</div>
+	<div class="square">
+		<img src="static/images/JUMPS.png" onclick="showImage('static/images/JUMPS.png')">
+	</div>
+
+	<!-- add more squares as needed -->
+
+	<script>
+		function showImage(url) {
+			// create a new image element
+			var img = new Image();
+
+			// set the source of the new image to the clicked image URL
+			img.src = url;
+
+			// create a new div element to hold the image
+			var div = document.createElement('div');
+			div.style.position = 'fixed';
+			div.style.top = 0;
+			div.style.left = 0;
+			div.style.width = '100%';
+			div.style.height = '100%';
+			div.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+			div.style.display = 'flex';
+			div.style.alignItems = 'center';
+			div.style.justifyContent = 'center';
+
+			// add the image to the new div element
+			div.appendChild(img);
+
+			// add the new div element to the body of the page
+			document.body.appendChild(div);
+
+			// add a click event to the new div element to remove it when clicked
+			div.onclick = function() {
+				document.body.removeChild(div);
+			};
+		}
+	</script>
+</body>
+</html>
