@@ -15,7 +15,7 @@
             top: 0;
             left: 0;
             right: 0;
-            background-color:#020a3d;
+            background-color:#080d2d;
             height: 70px;
             display: flex; 
             justify-content: space-between;
@@ -23,9 +23,10 @@
             
         }
         .logo{
-            content: url("static/images/logo.png");
+            content: url("static/images/logo1.png");
             width: auto;
             height: auto;
+            margin-left: 10px;
         }
 
         .course{
@@ -48,9 +49,16 @@
             border-top-width: 2px;
             border-color: #a9a8ac;
             width: 20%;
-            background-color:#020a3d;
+            background-color:#080d2d;
             padding: 1.5rem;
         }
+
+        #left-menu li{
+            color: aliceblue;
+            font-weight: bold;
+            font-family: Arial, sans-serif;
+        }
+
     </style>
 </head>
 <body>
@@ -64,11 +72,11 @@
         <div class="main-screen">
             <div id="left-menu">
                 <ul>
-                    <li><a href="{{ url_for('routes') }}">Routes</a></li>
-                    <li><a href="#">Dashboard 2</a></li>
-                    <li><a href="#">Dashboard 3</a></li>
-                    <li><a href="#">Dashboard 4</a></li>
-                    <li><a href="#">Dashboard 5</a></li>
+                    <li style="margin-bottom: 25px;"><a href="{{ url_for('routes') }}">Routes</a></li>
+                    <li style="margin-bottom: 25px;"><a href="{{ url_for('top_route') }}">Busiest Routes</a></li>
+                    <li style="margin-bottom: 25px;"><a href="{{ url_for('busy_airports') }}">Busiest Airports</a></li>
+                    <li style="margin-bottom: 25px;"><a href="{{ url_for('centrality') }}">Centrality</a></li>
+                    <li style="margin-bottom: 25px;"><a href="{{ url_for('results') }}">Flight Mapper</a></li>
                 </ul>
             </div>    
         </div>

@@ -42,7 +42,7 @@ def top_route():
     return render_template('top_route.html')
 
 @app.route('/busy_airports')
-def busyairports():
+def busy_airports():
     # Load the data into a pandas dataframe
     routes_df = pd.read_csv('Data/routes.csv', sep=',', header=None)
     airports_df = pd.read_csv('Data/airports.csv')
