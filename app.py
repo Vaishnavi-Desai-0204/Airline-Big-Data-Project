@@ -117,6 +117,10 @@ def index():
 def centrality():
     return render_template('centrality.html')
 
+@app.route('/stats')
+def stats():
+    return render_template('stats.html')
+
 @app.route('/routes')
 def routes():
     return render_template('routes.html')
