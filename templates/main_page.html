@@ -6,6 +6,7 @@
     <title>Data Analytics Webpage</title>
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://kit.fontawesome.com/968e4c0525.js" crossorigin="anonymous"></script>
+   
     <style>
         
         /* ----------------------------- */
@@ -23,9 +24,9 @@
             height: 80px;
             display: flex; 
             justify-content: space-between;
-            /* flex-direction: row; */
             
         }
+
         .logo{
             content: url("static/images/logo1.png");
             width: auto;
@@ -47,10 +48,11 @@
             height: 100vh;
             display: flex;
             margin-top: 80px;
-            flex-wrap: wrap;
+            /* flex-wrap: wrap; */
         }
 
         #left-menu{
+            height: 100vh;
             border-top-width: 2px;
             border-color: #a9a8ac;
             width: 20%;
@@ -95,6 +97,8 @@
         #main-content {
             padding: 1rem;
             justify-content: flex-start;
+            flex-wrap: wrap;
+            /* margin-left: 20%; */
         }
         .container {
             display: flex;
@@ -102,6 +106,7 @@
             gap: 2rem;
             height: 100%;
         }
+
         .box {
             width: 200px;
             height: 200px;
@@ -113,13 +118,100 @@
             border-radius: 20px;
             
         }
+
         .graph{
             content: url("static/images/airport_popularity.png");
             border-radius: 20px;
             width: 120px;
             height: 120px;
         }
+
+        .square {
+			/* display: inline-block; */
+			margin: 50px;
+			width: 300px;
+			height: 200px;
+			border-radius: 5px;
+			background-color: #eee;
+			text-align: center;
+			overflow: hidden;
+			/* position: relative; */
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.square img {
+			max-width: 120%;
+			max-height: 135%;
+			object-fit: fill;
+			transition: transform 0.2s ease-in-out;
+		}
+
+		.square:hover img {
+			transform: scale(1.1);
+		}
+
+		.square p {
+			margin: 10px;
+			font-size: 14px;
+			color: #333;
+			text-align: justify;
+		}
+
+        #modal {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0, 0, 0, 0.8);
+		}
+
+		p{
+			font-size: 14px;
+			max-width: 500px;
+			color: #eee;
+			justify-self: center;
+			align-items: center;
+			margin: 20px;
+			right: auto;
+		}
+
     </style>
+    <script>
+		function showImage(url, text) {
+			// create a new image element
+			var img = new Image();
+
+			// set the source of the new image to the clicked image URL
+			img.src = url;
+
+			// create a new div element to hold the image and text
+			var div = document.createElement('div');
+            div.id = "modal";
+
+			// add the image to the new div element
+			div.appendChild(img);
+
+			// create a new paragraph element for the text and add it to the new div element
+			var p = document.createElement('p');
+			p.innerHTML = text;
+			div.appendChild(p);
+
+			// add the new div element to the body of the page
+			document.body.appendChild(div);
+
+			// add a click event to the new div element to remove it when clicked
+			div.onclick = function() {
+				document.body.removeChild(div);
+			};
+		}
+	</script>
 </head>
 <body>
     <div class="body-bg">
@@ -145,12 +237,21 @@
             </div>  
             <div id="main-content">
                 <div class="container">
-                  <div class="box">
-                    <!-- <img class="graph" src="{{ url_for('static', filename='images/airport_popularity.png') }}"></div> -->
-                  </div>
-                  <div class="box"></div>
-                  <div class="box"></div>
-                  
+                    
+                    <div class="square">
+                        <img src="static/images/airport_popularity.png" onclick="showImage('static/images/output1.png', 'This is aggggggggggg<br>ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg paragraph of text for the first image.')">
+                    </div>
+
+                    <div class="square">
+                        <img src="static/images/output1.png" onclick="showImage('static/images/output1.png', 'This is aggggggggggg<br>ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg paragraph of text for the first image.')">
+                    </div>
+                    <div class="square">
+                        <img src="static/images/Airlines.png" onclick="showImage('static/images/Airlines.png', 'This is a paragraph of text for the second image.')">
+                    </div>
+                    <div class="square">
+                        <img src="static/images/JUMPS.png" onclick="showImage('static/images/JUMPS.png', 'This is a paragraph of text for the third image.')">
+                        
+                    </div>
                 </div>
             </div>  
         </div>
