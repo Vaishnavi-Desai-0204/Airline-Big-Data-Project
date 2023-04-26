@@ -32,15 +32,7 @@
             display: flex; 
             justify-content: space-between;
             z-index: 1;
-<<<<<<< Updated upstream
         }
-=======
-<<<<<<< HEAD
-            }
-=======
-        }
->>>>>>> a688b5b4c181304cffd73422813af8b989950ef1
->>>>>>> Stashed changes
 
         
 
@@ -233,10 +225,21 @@
 			text-align: center;
 			overflow: hidden;
 			display: flex;
-			/* flex-direction: column; */
 			justify-content: center;
 			align-items: center;
+            
         }
+
+        .rect img {
+            transform: scale(1.5);
+            max-width: 100%;
+			max-height: 120%;
+			object-fit: cover;
+			transition: transform 0.2s ease-in-out;
+		}
+        .rect:hover img {
+			transform: scale(1.1);
+		}
 
     </style>
     <script>
@@ -283,7 +286,7 @@
         <div class="main-screen">
             <div class="left-menu">
                 <div class="menu-heading">
-                    <i class="fa-solid fa-chart-simple"></i>  Analysis
+                    <i class="fa-solid fa-chart-simple"></i>    Analysis
                    
                 </div>
                 <ul>
@@ -298,7 +301,7 @@
                 <div class="container">
                     
                     <div class="square">
-                        <img src="static/images/airport_popularity.png" onclick="showImage('static/images/airport_popularity.png', 'This is the scatter plot for airport popularity.')">
+                        <img src="static/images/airport_popularity.png" onclick="showImage('static/images/airport_popularity.png', 'Using K-means clustering algorithm, the airports were clustered using the number of flights (arrivals and departures). 6 clusters were plotted against altitudes of airports.')">
                     </div>
                     <div class="square">
                         <img src="static/images/bargraph.png" onclick="showImage('static/images/bargraph.png', 'Distribution of the weights of the flights:<br> Mostly flights are covered by only one airline, representing more generally regional flights, as the histogram shows.<br>The highest frequency of weights is in the range of 1-2, indicating that most flights have low weight.The histogram is right-skewed, indicating that there are fewer flights with higher weights.Most flights are only covered by one airline, which means they are usually regional flights. There are some flights that have more than one airline covering them, but these are less common.')">
@@ -308,14 +311,11 @@
                         <img src="static/images/output1.png" onclick="showImage('static/images/output1.png', 'The graph shows the distribution of the number of connections (degree) that each airport has in the network. It shows that most airports have only a few connections, while a few airports have a lot of connections (known as hubs).The blue line represents a theoretical model that approximates the distribution of connections to follow a power law. This means that the probability of an airport having a high number of connections decreases very rapidly as the number of connections increases.')">
                     </div>
                     <div class="square">
-                        <img src="static/images/Airlines.png" onclick="showImage('static/images/Airlines.png', 'This is a paragraph of text for the second image.')">
+                        <img src="static/images/Airlines.png" onclick="showImage('static/images/Airlines.png', 'This piechart represents the top airlines in the network. It shows the top 6 airlines based on the number of flights that they cover.')">
                     </div>
-                    <div class="square">
-                        <img src="static/images/JUMPS.png" onclick="showImage('static/images/JUMPS.png', 'This is a paragraph of text for the third image.')">
-                        
-                    </div>
+                   
                     <div class="rect">
-                        <img src="static/images/JUMPS.png" onclick="showImage('static/images/JUMPS.png', 'This is a paragraph of text for the third image.')">
+                        <img src="static/images/JUMPS.png" onclick="showImage('static/images/JUMPS.png', 'The resulting plot shows the relationship between the maximum number of jumps and the percentage of airports that can be reached.We search for the proportion of airports that are reachable with a certain number of jumps, giving us an idea of the overall connectivity of the network.')">
                         
                     </div>
                 </div>

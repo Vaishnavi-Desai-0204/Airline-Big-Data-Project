@@ -152,6 +152,7 @@ def busy_airports():
     airport_counts['Altitude'] = airport_counts['Airport'].map(airports_df.set_index('IATA')['Altitude'])
     airport_counts['Latitude'] = airport_counts['Airport'].map(airports_df.set_index('IATA')['Latitude'])
     airport_counts['Longitude'] = airport_counts['Airport'].map(airports_df.set_index('IATA')['Longitude'])
+    airport_counts['Name'] = airport_counts['Airport'].map(airports_df.set_index('IATA')['Name'])
     airport_counts = airport_counts.dropna(subset=['Altitude'])
     # print(airport_counts)
     
@@ -164,9 +165,10 @@ def busy_airports():
         cluster_airports.drop(['Num flights','Cluster','Altitude'], axis = 1, inplace=True)
         cluster_airports.drop(columns=['Airport'], inplace=True)
         values = cluster_airports.values.tolist()
+        print(values)
         for val in values:
-            lat, lon = val[1], val[0]
-            val = [lat, lon, size[cluster] , colors[cluster]]
+            lat, lon , airport= val[1], val[0] , val[2]
+            val = [lat, lon, size[cluster] , colors[cluster], airport]
             cluster_lists.append(val)
         with open(f'static/cluster_{cluster}.json', 'w') as fp:
             json.dump(cluster_lists, fp)
