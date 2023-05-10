@@ -1,0 +1,14 @@
+Download the necessary libraries below  before running app.py:
+from flask import Flask, render_template, request
+import json
+import pandas
+import numpy
+import networkx 
+import json
+import plotly
+import sklearn.cluster
+
+Run app.py file to open the web-app. 
+Press CTRL and click on the http link to open the webpage. 
+* Running on http://127.0.0.1:5000
+
