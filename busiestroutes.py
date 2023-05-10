@@ -29,7 +29,7 @@ print(top_routes)
 
 # Plot a bar chart of the top 10 busiest routes
 plt.bar(x=top_routes['Source Airport'] + ' to ' + top_routes['Destination Airport'], height=top_routes['Num flights'])
-plt.xticks(rotation=90)
+plt.xticks(rotation=45, fontsize=6.5)
 plt.xlabel('Route')
 plt.ylabel('Number of flights')
 plt.title('Top 10 busiest routes')
@@ -61,6 +61,9 @@ print(airport_counts[airport_counts['Cluster'] == max_cluster]['Airport'])
 
 # Get the altitude of each airport in airport_counts
 airport_counts['Altitude'] = airport_counts['Airport'].map(airports_df.set_index('IATA')['Altitude'])
+
+jfk_cluster = airport_counts.loc[airport_counts['Airport'] == 'BDS', 'Cluster'].iloc[0]
+print("Cluster of JFK airport:", jfk_cluster)
 
 print(airport_counts)
 

@@ -37,58 +37,7 @@
     </div>
     <div id="scatter-plot"></div>
     <div id="my_dataviz"></div>
-    <!-- <script>
-        // Load the JSON data
-        d3.json("static/airport_counts.json").then(function(data) 
-            {
-                // set the dimensions and margins of the graph
-                var height = 400;
-                var width = 460;
-                var margin = {top: 10, right: 30, bottom: 30, left: 60},
-                width = width - margin.left - margin.right,
-                height = height - margin.top - margin.bottom;
-                
-                // append the svg object to the body of the page
-                var svg = d3.select("#scatter-plot")
-                    .append("svg")
-                    .attr("width", width + margin.left + margin.right)
-                    .attr("height", height + margin.top + margin.bottom)
-                    .append("g")
-                    .attr("transform","translate(" + margin.left + "," + margin.top + ")");
-                
-                // Create the x and y scales
-                var x = d3.scaleBand()
-                    .range([0, width])
-                    .domain([0, d3.max(data, function(d) { return d["Num flights"]; })]);
     
-                var y = d3.scaleLinear()
-                .range([height, 0])
-                .domain([0, d3.max(data, function(d) { return d["Altitude"]; })]);    
-    
-                // Create the x and y axes
-                var xAxis = d3.axisBottom(x);
-                var yAxis = d3.axisLeft(y);
-    
-                // Set the color scale
-                const color = d3.scaleOrdinal(d3.schemeCategory10)
-                    .domain(d3.range(6));
-
-                // Add the scatter plot
-                svg.selectAll("dot")
-                    .data(data)
-                    .enter()
-                    .append("circle")
-                    .attr("cx", function (d) { return x(d["Num flights"]); } )
-                    .attr("cy", function (d) { return y(d.Altitude); } )
-                    .attr("r", 5)
-                    .style("fill", function (d) { return color(d.Cluster); } );
-    
-    
-    
-    
-    
-            });        
-       </script> -->
        <script>
 
         // set the dimensions and margins of the graph

@@ -136,7 +136,7 @@
                     
                     
                     .attr('d', function(d) {
-                      return lngLatToArc(d, 'sourceLocation', 'targetLocation', 1); // A bend of 5 looks nice and subtle, but this will depend on the length of your arcs and the visual look your visualization requires. Higher number equals less bend.
+                      return lngLatToArc(d, 'sourceLocation', 'targetLocation', 1); 
                     });
                 })
                 .on("mouseout",function(current_bubble) {
@@ -164,7 +164,7 @@
         });
 
       	function lngLatToArc(d, sourceName, targetName, bend){
-      		// If no bend is supplied, then do the plain square root
+      		
       		bend = bend || 1 ;
       	
       		var sourceLngLat = d[sourceName],
@@ -184,7 +184,7 @@
       					dy = targetY - sourceY,
       					dr = Math.sqrt(dx * dx + dy * dy)*bend;
 
-      			// To avoid a whirlpool effect, make the bend direction consistent regardless of whether the source is east or west of the target
+      			
       			var west_of_source = (targetX - sourceX) < 0;
       			if (west_of_source) return "M" + targetX + "," + targetY + "A" + dr + "," + dr + " 0 0,1 " + sourceX + "," + sourceY;
       			return "M" + sourceX + "," + sourceY + "A" + dr + "," + dr + " 0 0,1 " + targetX + "," + targetY;

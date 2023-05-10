@@ -98,13 +98,13 @@
 
 
 
-      	// This function takes an object, the key names where it will find an array of lng/lat pairs, e.g. `[-74, 40]`
-      	// And a bend parameter for how much bend you want in your arcs, the higher the number, the less bend.
+      	// This function takes an object, the key names where it will find an array of lng/lat pairs
+      	// And a bend parameter for bend in arcs, the higher the number, the less bend.
       	function lngLatToArc(d, sourceName, targetName, bend){
       		// If no bend is supplied, then do the plain square root
       		bend = bend || 1 ;
       		// `d[sourceName]` and `d[targetname]` are arrays of `[lng, lat]`
-      		// Note, people often put these in lat then lng, but mathematically we want x then y which is `lng,lat`
+  
 
       		var sourceLngLat = d[sourceName],
       				targetLngLat = d[targetName];
@@ -113,8 +113,7 @@
       			var sourceXY = projection( sourceLngLat ),
       					targetXY = projection( targetLngLat );
 
-      			// Uncomment this for testing, useful to see if you have any null lng/lat values
-      			// if (!targetXY) console.log(d, targetLngLat, targetXY)
+      			
       			var sourceX = sourceXY[0],
       					sourceY = sourceXY[1];
 
@@ -125,7 +124,7 @@
       					dy = targetY - sourceY,
       					dr = Math.sqrt(dx * dx + dy * dy)*bend;
 
-      			// To avoid a whirlpool effect, make the bend direction consistent regardless of whether the source is east or west of the target
+      			
       			var west_of_source = (targetX - sourceX) < 0;
       			if (west_of_source) return "M" + targetX + "," + targetY + "A" + dr + "," + dr + " 0 0,1 " + sourceX + "," + sourceY;
       			return "M" + sourceX + "," + sourceY + "A" + dr + "," + dr + " 0 0,1 " + targetX + "," + targetY;
@@ -135,11 +134,10 @@
       		}
       	}
 
-      	// Zoom to feature on click
-      	// This is optional but if you use mapstarter.com, you get it for free.
+      	
       	function clicked(d,i) {
 
-      		//Add any other onClick events here
+      		
       		var x, y, k;
 
       		if (d && centered !== d) {
@@ -165,7 +163,7 @@
       			.style("stroke-width", 1 / k + "px"); // Keep the border width constant
 
       		//Zoom and re-center the whole map container
-      		//Comment `.transition()` and `.duration()` to eliminate gradual zoom
+      		
       		svg
       			.transition()
       			.duration(500)
